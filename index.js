@@ -28,8 +28,12 @@ export default () => {
     captureUncaught: true,
     captureUnhandledRejections: true,
   });
-  app.on('error', (err, ctx) => {
-    rollbar.error(err, ctx.request);
+  app.use(async (ctx, next) => {
+    try {
+      await next();
+    } catch (err) {
+      rollbar.error(err, ctx.request);
+    }
   });
 
   app.keys = ['some secret hurr'];
