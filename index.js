@@ -23,16 +23,17 @@ import container from './container';
 export default () => {
   const app = new Koa();
 
-  // if (process.env.NODE_ENV === 'production') {
-  const rollbar = new Rollbar({
-    accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-  });
-  app.on('error', (err, ctx) => {
-    rollbar.error(err, ctx.request);
-  });
-  // }
+  if (process.env.NODE_ENV === 'production') {
+    const rollbar = new Rollbar({
+      accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+    });
+    app.on('error', (err, ctx) => {
+      rollbar.error(err, ctx.request);
+    });
+  }
+  
 
   app.keys = ['some secret hurr'];
   app.use(session(app));
