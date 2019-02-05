@@ -33,7 +33,6 @@ export default () => {
       rollbar.error(err, ctx.request);
     });
   }
-  
 
   app.keys = ['some secret hurr'];
   app.use(session(app));
