@@ -15,7 +15,7 @@ import flash from 'koa-flash-simple';
 import _ from 'lodash';
 import methodOverride from 'koa-methodoverride';
 
-import Rollbar from 'rollbar';
+// import Rollbar from 'rollbar';
 import webpackConfig from './webpack.config';
 import addRoutes from './routes';
 import container from './container';
@@ -23,6 +23,7 @@ import container from './container';
 export default () => {
   const app = new Koa();
 
+  /*
   if (process.env.NODE_ENV === 'production') {
     const rollbar = new Rollbar(process.env.ROLLBAR_TOKEN);
     app.use(async (ctx, next) => {
@@ -33,6 +34,7 @@ export default () => {
       }
     });
   }
+  */
 
   app.keys = ['some secret hurr'];
   app.use(session(app));
