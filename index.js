@@ -23,15 +23,16 @@ import container from './container';
 export default () => {
   const app = new Koa();
 
-  const rollbar = new Rollbar({
-    accessToken: process.env.ROLLBAR,
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-  });
-
-  app.on('error', (err, ctx) => {
-    rollbar.error(err, ctx.request);
-  });
+  if (process.env.NODE_ENV === 'production') {
+    const rollbar = new Rollbar(process.env.ROLLBAR_TOKEN);
+    app.use(async (ctx, next) => {
+      try {
+        await next();
+      } catch (err) {
+        rollbar.error(err, ctx.request);
+      }
+    });
+  }
 
   app.keys = ['some secret hurr'];
   app.use(session(app));
@@ -52,12 +53,6 @@ export default () => {
     return null;
   }));
   app.use(serve(path.join(__dirname, 'public')));
-
-  if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-    koaWebpack({
-      config: webpackConfig,
-    }).then(m => app.use(m));
-  }
 
   if (process.env.NODE_ENV === 'development') {
     koaWebpack({
