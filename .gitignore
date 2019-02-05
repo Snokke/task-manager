@@ -7,5 +7,5 @@ flow-typed
 public/assets
 .bash_history
 .history
-coverage
 .env
+coverage
