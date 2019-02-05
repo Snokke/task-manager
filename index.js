@@ -15,7 +15,7 @@ import flash from 'koa-flash-simple';
 import _ from 'lodash';
 import methodOverride from 'koa-methodoverride';
 
-// import Rollbar from 'rollbar';
+import Rollbar from 'rollbar';
 import webpackConfig from './webpack.config';
 import addRoutes from './routes';
 import container from './container';
@@ -23,18 +23,16 @@ import container from './container';
 export default () => {
   const app = new Koa();
 
-  /*
   if (process.env.NODE_ENV === 'production') {
-    const rollbar = new Rollbar(process.env.ROLLBAR_TOKEN);
-    app.use(async (ctx, next) => {
-      try {
-        await next();
-      } catch (err) {
-        rollbar.error(err, ctx.request);
-      }
+    const rollbar = new Rollbar({
+      accessToken: process.env.ROLLBAR_TOKEN,
+      captureUncaught: true,
+      captureUnhandledRejections: true,
+    });
+    app.on('error', (err, ctx) => {
+      rollbar.error(err, ctx.request);
     });
   }
-  */
 
   app.keys = ['some secret hurr'];
   app.use(session(app));
@@ -55,12 +53,6 @@ export default () => {
     return null;
   }));
   app.use(serve(path.join(__dirname, 'public')));
-
-  if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-    koaWebpack({
-      config: webpackConfig,
-    }).then(m => app.use(m));
-  }
 
   if (process.env.NODE_ENV === 'development') {
     koaWebpack({
