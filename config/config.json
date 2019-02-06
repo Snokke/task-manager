@@ -8,10 +8,11 @@
     "dialect": "sqlite"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "qgtztcipdazhze",
+    "password": "62ac58212ca7b57b46186ed0e61e40673f1fdd774117dff20b3566f855911de6",
+    "database": "d4neg6nm3n36d2",
+    "host": "1ec2-54-217-208-105.eu-west-1.compute.amazonaws.com",
+    "port": 5432,
+    "dialect": "postgres"
   }
 }
