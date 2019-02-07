@@ -1,10 +1,10 @@
 extends /layouts/application.pug
 
 block content
-  h3.mb-3.font-weight-normal.text-center Please sign in
+  h3.mb-3.text-center Please sign in
   div.row.justify-content-center
     div.col-4
       +formFor(f, { url: urlFor('session'), method: 'post' })
-        +input(f, 'Email address')
-        +input(f, 'Password', { as: 'password' })
-        +button(f)
+        +input(f, 'email', 'Email address')
+        +input(f, 'password', 'Password', { as: 'password' })
+        +button(f, 'Sign in')

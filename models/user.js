@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       validate: {
-        isEmail: true,
+        isEmail: { args: true, msg: "Please enter valid email" }
       },
     },
     passwordDigest: {
@@ -19,17 +19,17 @@ export default (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.VIRTUAL,
-      set: (value) => {
+      set: function(value) {
         this.setDataValue('passwordDigest', encrypt(value));
         this.setDataValue('password', value);
         return value;
       },
       validate: {
-        len: [1, +Infinity],
+        len: { args: [1, +Infinity], msg: "Minimum length of password is 1"},
       },
     },
   }, {
-    classMethods: {
+    getterMethods: {
       fullName() {
         return `${this.firstName} ${this.lastName}`;
       },
