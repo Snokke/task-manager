@@ -18,16 +18,14 @@ describe('requests', () => {
     const res = await request.agent(server)
       .get('/');
 
-    expect(res.statusCode).toEqual(200);
-    // expect(res).toHaveHTTPStatus(200);
+    expect(res).toHaveHTTPStatus(200);
   });
 
   it('GET 404', async () => {
     const res = await request.agent(server)
       .get('/wrong-path');
 
-    expect(res.statusCode).toEqual(404);
-    // expect(res).toHaveHTTPStatus(404);
+    expect(res).toHaveHTTPStatus(404);
   });
 
   afterEach((done) => {
