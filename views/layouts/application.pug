@@ -30,7 +30,12 @@ html(lang="en")
             li.nav-item
               a.nav-link(href=urlFor('newUser')) Sign Up
     .container
-      - const msg = flash.get()
-      if msg
-        .alert.alert-info.m-3= msg
+      - var messages = flashMessage && flashMessage.messages
+      - if (messages)
+        - var messageKeys = Object.keys(messages)
+        each messageKey in messageKeys
+          .alert(class=`alert-${messageKey} alert-dismissible fade show` role="alert")
+            = messages[messageKey]
+            button(type="button" class="close" data-dismiss="alert" aria-label="Close")
+              span(aria-hidden="true") &times;
       block content

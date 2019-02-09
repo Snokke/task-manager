@@ -4,7 +4,7 @@ block content
   h3.mb-3.text-center Edit Account
   div.row.justify-content-center
     div.col-4
-      +formFor(f, { url: urlFor('edit'), method: 'post' })
+      +formFor(f, { url: urlFor('edit'), method: 'patch' })
         +input(f, 'email', 'Email address')
         +input(f, 'firstName', 'First name')
         +input(f, 'lastName', 'Last name')

@@ -11,12 +11,11 @@ import serve from 'koa-static';
 import koaWebpack from 'koa-webpack';
 import bodyParser from 'koa-bodyparser';
 import session from 'koa-generic-session';
-import flash from 'koa-flash-simple';
+import flashMessage from 'koa-flash-message';
 import _ from 'lodash';
 import methodOverride from 'koa-methodoverride';
 
 import { format } from 'date-fns';
-// import moment from 'moment';
 import Rollbar from 'rollbar';
 import webpackConfig from './webpack.config';
 import addRoutes from './routes';
@@ -40,10 +39,10 @@ export default () => {
 
   app.keys = ['some secret hurr'];
   app.use(session(app));
-  app.use(flash());
+  app.use(flashMessage);
   app.use(async (ctx, next) => {
     ctx.state = {
-      flash: ctx.flash,
+      flashMessage: ctx.flashMessage,
       isSignedIn: () => ctx.session.userId !== undefined,
     };
     await next();

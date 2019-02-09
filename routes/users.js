@@ -23,7 +23,7 @@ export default (router) => {
       const user = User.build(form);
       try {
         await user.save();
-        ctx.flash.set(`User ${form.firstName} has been created`);
+        ctx.flash.set(`User ${form.email} has been created`);
         ctx.redirect(router.url('root'));
       } catch (e) {
         ctx.render('users/new', { f: buildFormObj(user, e) });
@@ -38,7 +38,7 @@ export default (router) => {
       });
       ctx.render('users/edit', { currentUser, f: buildFormObj(currentUser) });
     })
-    .post('edit', '/users/edit', async (ctx) => {
+    .patch('edit', '/users/edit', async (ctx) => {
       const id = ctx.session.userId;
       const currentUser = await User.findOne({
         where: {
@@ -50,10 +50,11 @@ export default (router) => {
       } = ctx.request.body.form;
       if (currentUser.passwordDigest === encrypt(password)) {
         currentUser.update({ email, firstName, lastName });
-        ctx.flash.set(`User ${firstName} has been updated`);
+        ctx.flashMessage.notice = `User ${email} has been updated`;
         ctx.redirect(router.url('root'));
+        return;
       }
-      const e = 'Wrong password';
-      ctx.render('users/edit', { f: buildFormObj(currentUser, e) });
+      ctx.flashMessage.warning = 'Wrong password';
+      ctx.render('users/edit', { f: buildFormObj(currentUser) });
     });
 };
