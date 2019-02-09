@@ -1,7 +1,11 @@
+const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
+  entry: {
+    main: ['./src/index.js'],
+  },
   output: {
     path: path.join(__dirname, 'public', 'assets'),
     filename: 'main.js',
@@ -20,4 +24,11 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+    }),
+  ],
 };

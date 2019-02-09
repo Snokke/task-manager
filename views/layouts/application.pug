@@ -17,7 +17,12 @@ html(lang="en")
         ul.navbar-nav
           if isSignedIn()
             li.nav-item
-              a.nav-link(href=urlFor('session') data-method='delete' rel='nofollow') Sign Out
+              span.navbar-text= user.email
+            li.nav-item
+              form.form-inline.d-inline-block(action= urlFor('session') method='post')
+                input(name='_method' type='hidden' value='delete')
+                button.btn.btn-link.nav-link(type='submit') Sing Out
+              //a.nav-link(href=urlFor('session') data-method='delete' rel='nofollow') Sign Out
           else
             li.nav-item
               a.nav-link(href=urlFor('newSession')) Sign In
