@@ -17,7 +17,8 @@ html(lang="en")
         ul.navbar-nav
           if isSignedIn()
             li.nav-item
-              span.navbar-text= user.email
+              //a.nav-link(href=urlFor('edit'))= currentUser.email
+              a.nav-link(href=urlFor('edit')) Your account
             li.nav-item
               form.form-inline.d-inline-block(action= urlFor('session') method='post')
                 input(name='_method' type='hidden' value='delete')

@@ -1,7 +1,7 @@
 extends /layouts/application.pug
 
 block content
-  table.table.table-stripped
+  table.table.table-striped
     thead
       tr
         th Full Name
@@ -12,4 +12,4 @@ block content
         tr
           td= user.fullName
           td= user.email
-          td= user.createdAt
+          td= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')
