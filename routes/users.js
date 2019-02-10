@@ -23,7 +23,7 @@ export default (router) => {
       const user = User.build(form);
       try {
         await user.save();
-        ctx.flash.set(`User ${form.email} has been created`);
+        ctx.flashMessage.notice = `User ${form.email} has been created`;
         ctx.redirect(router.url('root'));
       } catch (e) {
         ctx.render('users/new', { f: buildFormObj(user, e) });
@@ -56,5 +56,17 @@ export default (router) => {
       }
       ctx.flashMessage.warning = 'Wrong password';
       ctx.render('users/edit', { f: buildFormObj(currentUser) });
+    })
+    .delete('deleteUser', '/users/edit', async (ctx) => {
+      const id = ctx.session.userId;
+      const currentUser = await User.findOne({
+        where: {
+          id,
+        },
+      });
+      currentUser.destroy();
+      ctx.session = {};
+      ctx.flashMessage.notice = 'User has been deleted';
+      ctx.redirect(router.url('root'));
     });
 };
