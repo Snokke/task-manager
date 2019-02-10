@@ -1,7 +1,3 @@
-// @flow
-
-// import '@babel/polyfill';
-
 import path from 'path';
 import Koa from 'koa';
 import Pug from 'koa-pug';
