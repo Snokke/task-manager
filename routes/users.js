@@ -64,9 +64,13 @@ export default (router) => {
           id,
         },
       });
-      currentUser.destroy();
-      ctx.session = {};
-      ctx.flashMessage.notice = 'User has been deleted';
-      ctx.redirect(router.url('root'));
+      try {
+        await currentUser.destroy();
+        ctx.session = {};
+        ctx.flashMessage.notice = 'User has been deleted';
+        ctx.redirect(router.url('root'));
+      } catch (e) {
+        ctx.flashMessage.warning = 'Unable to delete user';
+      }
     });
 };

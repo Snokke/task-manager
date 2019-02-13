@@ -17,11 +17,11 @@ export default (router) => {
       });
       if (user && user.passwordDigest === encrypt(password)) {
         ctx.session.userId = user.id;
-        ctx.flashMessage.notice = 'Log In Successfully!';
+        ctx.flashMessage.notice = 'Log in successfully!';
         ctx.redirect(router.url('root'));
         return;
       }
-      ctx.flashMessage.warning = 'User name or Password Error.';
+      ctx.flashMessage.warning = 'Wrong email or password';
       ctx.render('sessions/new', { f: buildFormObj({ email }) });
     })
     .delete('session', '/session', (ctx) => {
