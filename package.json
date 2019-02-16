@@ -101,6 +101,7 @@
     "jest": "^23.6.0",
     "jest-cli": "^23.6.0",
     "jest-supertest-matchers": "0.0.2",
+    "mini-css-extract-plugin": "^0.5.0",
     "nodemon": "^1.18.9",
     "supertest": "^3.3.0",
     "webpack": "^4.29.3",
