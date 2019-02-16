@@ -1,0 +1,38 @@
+extends /layouts/application.pug
+
+block content
+  .row
+    .col-sm-9
+      h2= task.name
+      hr
+      p!= task.description.replace(/\n/g, '<br />')
+    .col-sm-3
+      .card
+        .card-header Task info
+        .card-body
+          table.table
+            thead
+              tr
+                th ID
+                th= task.id
+            tbody
+              tr
+                td Status
+                td= task.status
+              tr
+                td Creator
+                td= task.creator.fullName
+              tr
+                td Assigned to
+                td= task.assignedTo
+              tr
+                td Created
+                td= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')
+              tr
+                td Updated
+                td= formatDate(new Date(task.updatedAt), 'HH:mm DD.MM.YYYY')  
+              tr
+                td Tags
+                td= task.tags
+          if isSignedIn() 
+            a(href=urlFor('editTask', { id: task.id }) class="btn btn-primary") Edit task

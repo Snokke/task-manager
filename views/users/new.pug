@@ -1,7 +1,7 @@
 extends /layouts/application.pug
 
 block content
-  h3.mb-3.text-center Create Account
+  h3.mb-3.text-center.mt-3 Create Account
   div.row.justify-content-center
     div.col-4
       +formFor(f, { url: urlFor('users'), method: 'post' })
@@ -9,6 +9,6 @@ block content
         +input(f, 'firstName', 'First name')
         +input(f, 'lastName', 'Last name')
         +input(f, 'password', 'Password', { as: 'password' })
-        +button(f, 'Create account')
+        +button(f, 'Create account', 1)
         p.text-center Have an account? 
           a(href=urlFor('newSession')) Log in

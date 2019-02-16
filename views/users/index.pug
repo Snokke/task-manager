@@ -1,15 +1,17 @@
 extends /layouts/application.pug
 
 block content
-  table.table.table-striped
-    thead
-      tr
-        th Full Name
-        th Email
-        th Created At
-    tbody
-      each user in users
-        tr
-          td= user.fullName
-          td= user.email
-          td= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')
+  .row.justify-content-center
+    .col-6
+      table.table.table-striped.mt-3
+        thead
+          tr
+            th(style="width: 40%") Full Name
+            th(style="width: 40%") Email
+            th(style="width: 20%") Created At
+        tbody
+          each user in users
+            tr
+              td= user.fullName
+              td= user.email
+              td= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')

@@ -15,8 +15,12 @@ module.exports = {
     status: {
       type: Sequelize.STRING,
     },
-    creator: {
-      type: Sequelize.STRING,
+    creatorId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
     assignedTo: {
       type: Sequelize.STRING,

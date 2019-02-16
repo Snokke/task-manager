@@ -1,0 +1,41 @@
+extends /layouts/application.pug
+
+block content
+  h3.mb-3.text-center.mt-3 Edit task
+  .row
+    .col-9
+      +inlineFormFor(f, { url: urlFor('editTask', { id: task.id }), method: 'patch' })
+        +input(f, 'name')
+        +inputArea(f, 'description', 'Description', 12)
+        .row
+          .col-md-3
+            +inputSelect(status, 'Status')
+          .col-md-3
+            +inputSelect(status, 'Assigned to')
+        +inlineInput(f, 'tags', 'Tags')
+        .row
+          .col
+            +button(f, 'Update task')
+          .col.col-auto
+            a(class="btn btn-light" role="button" href=urlFor('tasks') rel='nofollow') Cancel
+            
+    .col-sm-3
+      .card
+        .card-header Task info
+        .card-body
+          table.table
+            thead
+              tr
+                th ID
+                th= task.id
+            tbody
+              tr
+                td Creator
+                td= task.creator.fullName
+              tr
+                td Created
+                td= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')
+              tr
+                td Updated
+                td= formatDate(new Date(task.updatedAt), 'HH:mm DD.MM.YYYY')
+          a(href=urlFor('deleteTask', { id: task.id }) class="btn btn-danger" data-method='delete' rel='nofollow') Delete task

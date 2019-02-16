@@ -6,7 +6,7 @@ html(lang="en")
     title= Title
     script(src='/assets/main.js')
   body
-    nav.navbar.navbar-expand-lg.navbar-light.bg-faded
+    nav.navbar.navbar-expand-lg.navbar-light(style="background-color: #e3f2fd;")
       a.navbar-brand(href="/") Task Manager
       button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
         span.navbar-toggler-icon
@@ -14,6 +14,8 @@ html(lang="en")
         ul.navbar-nav.mr-auto
           li.nav-item.active
             a.nav-link(href=urlFor('users')) Users
+          li.nav-item.active
+            a.nav-link(href=urlFor('tasks')) Tasks
         ul.navbar-nav
           if isSignedIn()
             li.nav-item
@@ -25,7 +27,7 @@ html(lang="en")
               a.nav-link(href=urlFor('newSession')) Sign In
             li.nav-item
               a.nav-link(href=urlFor('newUser')) Sign Up
-    .container
+    .container.mt-3
       - var messages = flashMessage && flashMessage.messages
       - if (messages)
         - var messageKeys = Object.keys(messages)
@@ -34,4 +36,5 @@ html(lang="en")
             = messages[messageKey]
             button(type="button" class="close" data-dismiss="alert" aria-label="Close")
               span(aria-hidden="true") &times;
+    .container.col-xl-11
       block content

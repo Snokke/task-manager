@@ -4,10 +4,27 @@ mixin formFor(f, options = {})
   - const url = _.get(options, 'url');
   - const method = _.get(options, 'method', 'get').toLowerCase();
   - const isStandart = _.includes(['get', 'post'], method);
-  form(action= url method= isStandart ? method : 'post' )
+  form(action= url method= isStandart ? method : 'post')
     if !isStandart
       input(name='_method' type='hidden' value= method)
     block
+
+mixin inlineFormFor(f, options = {})
+  - const url = _.get(options, 'url');
+  - const method = _.get(options, 'method', 'get').toLowerCase();
+  - const isStandart = _.includes(['get', 'post'], method);
+  form(action= url method= isStandart ? method : 'post')
+    if !isStandart
+      input(name='_method' type='hidden' value= method)
+    block
+
+mixin inlineInput(f, property, text, options = { as: 'text' })
+  - const value = f.object[property] === undefined ? '' : f.object[property]
+  .form-group(class=(f.errors[property] && 'has-danger'))
+    label(class=(text === undefined ? 'sr-only' : ''))= text
+    input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`) 
+    if f.errors[property]
+      .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
 
 mixin input(f, property, text, options = { as: 'text' })
   - const value = f.object[property] === undefined ? '' : f.object[property]
@@ -17,6 +34,21 @@ mixin input(f, property, text, options = { as: 'text' })
     if f.errors[property]
       .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
 
-mixin button(f, text, type = 'submit')
+mixin inputArea(f, property, text, rowsForArea, options = { as: 'text' })
+  - const value = f.object[property] === undefined ? '' : f.object[property]
+  .form-group(class=(f.errors[property] && 'has-danger'))
+    label.sr-only= property
+    textarea(name=getInputName(f, property) class='form-control' type=options['as'] placeholder=text rows=rowsForArea)= `${value}`
+    if f.errors[property]
+      .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
+
+mixin inputSelect(array, text, options = { as: 'text' })
   .form-group
-    input(class='btn btn-primary btn-block' type=`${type}` value=text)
+    label(class=(text === undefined ? 'sr-only' : ''))= text
+    select(class='form-control' type=options['as']) 
+      each element in array
+        option= element
+
+mixin button(f, text, isBlock, type = 'submit')
+  .form-group
+    input(class=(isBlock === undefined ? 'btn btn-primary' : 'btn btn-primary btn-block') type=`${type}` value=text)

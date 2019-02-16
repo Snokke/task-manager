@@ -14,8 +14,8 @@ export default (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    creator: {
-      type: DataTypes.STRING,
+    creatorId: {
+      type: DataTypes.INTEGER,
       validate: {
         notEmpty: true,
       },
@@ -24,6 +24,7 @@ export default (sequelize, DataTypes) => {
     tags: DataTypes.STRING,
   }, {});
   Task.associate = function(models) {
+    Task.belongsTo(models.User, { as: 'creator', foreignKey: 'creatorId' });
     Task.belongsToMany(models.Tag, { through: 'TaskTags', foreignKey: 'taskId' });
   };
   return Task;

@@ -1,0 +1,26 @@
+extends /layouts/application.pug
+
+block content
+  if isSignedIn()
+    a(class="btn btn-primary mb-3" role="button" href=urlFor('newTask') rel='nofollow') Create task
+  table.table.table-hover.table-sm
+    thead.thead-light
+      tr
+        th(style="width: 5%") ID
+        th(style="width: 45%") Task
+        th(style="width: 10%") Status
+        th(style="width: 10%") Creator
+        th(style="width: 10%") Assigned to
+        th(style="width: 10%") Tags
+        th(style="width: 10%") Created
+    tbody
+      each task in tasks
+        tr
+          td.align-middle= task.id
+          td.align-middle
+            a.nav-link(href=urlFor('viewTask', { id: task.id }))= task.name
+          td.align-middle= task.status
+          td.align-middle= task.creator.fullName
+          td.align-middle= task.assignedTo
+          td.align-middle= task.tags
+          td.align-middle= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')
