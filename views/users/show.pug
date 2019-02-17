@@ -27,3 +27,5 @@ block content
               tr
                 td Created
                 td= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')
+          if (isSignedIn() && checkAccess(user.id))
+            a(href=urlFor('editUser', { id: user.id }) class="btn btn-primary") Edit user

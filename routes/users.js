@@ -5,14 +5,8 @@ import { User } from '../models';
 export default (router) => {
   router
     .get('users', '/users', async (ctx) => {
-      const id = ctx.session.userId;
-      const currentUser = await User.findOne({
-        where: {
-          id,
-        },
-      });
       const users = await User.findAll();
-      ctx.render('users', { users, currentUser });
+      ctx.render('users', { users });
     })
     .get('newUser', '/users/new', (ctx) => {
       const user = User.build();
@@ -29,18 +23,18 @@ export default (router) => {
         ctx.render('users/new', { f: buildFormObj(user, e) });
       }
     })
-    .get('editAccount', '/users/edit', async (ctx) => {
-      const id = ctx.session.userId;
-      const currentUser = await User.findOne({
+    .get('editUser', '/users/:id/edit', async (ctx) => {
+      const { id } = ctx.params;
+      const user = await User.findOne({
         where: {
           id,
         },
       });
-      ctx.render('users/edit', { currentUser, f: buildFormObj(currentUser) });
+      ctx.render('users/edit', { user, f: buildFormObj(user) });
     })
-    .patch('editAccount', '/users/edit', async (ctx) => {
-      const id = ctx.session.userId;
-      const currentUser = await User.findOne({
+    .patch('editUser', '/users/:id/edit', async (ctx) => {
+      const { id } = ctx.params;
+      const user = await User.findOne({
         where: {
           id,
         },
@@ -48,38 +42,39 @@ export default (router) => {
       const {
         email, firstName, lastName, password,
       } = ctx.request.body.form;
-      if (currentUser.passwordDigest === encrypt(password)) {
-        currentUser.update({ email, firstName, lastName });
+      if (user.passwordDigest === encrypt(password)) {
+        user.update({ email, firstName, lastName });
         ctx.flashMessage.notice = `User ${email} has been updated`;
         ctx.redirect(router.url('root'));
         return;
       }
       ctx.flashMessage.warning = 'Wrong password';
-      ctx.render('users/edit', { f: buildFormObj(currentUser) });
+      ctx.render('users/edit', { f: buildFormObj(user), user });
     })
-    .delete('deleteUser', '/users/edit', async (ctx) => {
-      const id = ctx.session.userId;
-      const currentUser = await User.findOne({
-        where: {
-          id,
-        },
-      });
-      try {
-        await currentUser.destroy();
-        ctx.session = {};
-        ctx.flashMessage.notice = 'User has been deleted';
-        ctx.redirect(router.url('root'));
-      } catch (e) {
-        ctx.flashMessage.warning = 'Unable to delete user';
-      }
-    })
-    .get('viewUser', '/user/view/:id', async (ctx) => {
+    .delete('deleteUser', '/users/:id', async (ctx) => {
       const { id } = ctx.params;
       const user = await User.findOne({
         where: {
           id,
         },
       });
-      ctx.render('users/view', { user });
+      try {
+        await user.destroy();
+        ctx.session = {};
+        ctx.flashMessage.notice = 'User has been deleted';
+        ctx.redirect(router.url('root'));
+      } catch (e) {
+        ctx.flashMessage.warning = `Unable to delete user ${user.email}`;
+        ctx.render('users/edit', { f: buildFormObj(user), user });
+      }
+    })
+    .get('showUser', '/user/:id', async (ctx) => {
+      const { id } = ctx.params;
+      const user = await User.findOne({
+        where: {
+          id,
+        },
+      });
+      ctx.render('users/show', { user });
     });
 };

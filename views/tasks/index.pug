@@ -21,10 +21,10 @@ block content
         tr
           td.align-middle= task.id
           td.align-middle
-            a(href=urlFor('viewTask', { id: task.id }))= task.name
+            a(href=urlFor('showTask', { id: task.id }))= task.name
           td.align-middle= task.status
           td.align-middle
-            a(href=urlFor('viewUser', { id: task.creator.id }))= task.creator.fullName
+            a(href=urlFor('showUser', { id: task.creator.id }))= task.creator.fullName
           td.align-middle= task.assignedTo
           td.align-middle= task.tags
           td.align-middle= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')

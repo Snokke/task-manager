@@ -2,7 +2,7 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 import faker from 'faker';
 
-import { sequelize } from '../models';
+import { User, sequelize } from '../models';
 import app from '..';
 
 describe('user', () => {
@@ -52,9 +52,9 @@ describe('user', () => {
       .post('/session')
       .send({ form: { email: user.email, password: user.password } });
     const cookie = resAuth.headers['set-cookie'];
-
+    const { id } = await User.findOne({ where: { email: user.email } });
     const res = await request.agent(server)
-      .patch('/users/edit')
+      .patch(`/users/${id}/edit`)
       .set('Cookie', cookie)
       .send({ form: changedUser });
 
@@ -66,9 +66,9 @@ describe('user', () => {
       .post('/session')
       .send({ form: { email: user.email, password: user.password } });
     const cookie = resAuth.headers['set-cookie'];
-
+    const { id } = await User.findOne({ where: { email: user.email } });
     const res = await request.agent(server)
-      .delete('/users/edit')
+      .delete(`/users/${id}`)
       .set('Cookie', cookie);
 
     expect(res).toHaveHTTPStatus(302);

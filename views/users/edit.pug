@@ -7,7 +7,7 @@ block content
   h3.mb-3.text-center.mt-3 Edit Account
   div.row.justify-content-center
     div.col-4
-      +formFor(f, { url: urlFor('editAccount'), method: 'patch' })
+      +formFor(f, { url: urlFor('editUser', { id: user.id }), method: 'patch' })
         +input(f, 'email', 'Email address')
         +input(f, 'firstName', 'First name')
         +input(f, 'lastName', 'Last name')
@@ -26,4 +26,4 @@ block content
         div.modal-body Are you sure you want do delete your account? This action cannot be undone.
         div.modal-footer
           button(type="button" class="btn btn-secondary" data-dismiss="modal") Close
-          a(class="btn btn-danger" role="button" href=urlFor('deleteUser') data-method='delete' rel='nofollow') Delete account
+          a(class="btn btn-danger" role="button" href=urlFor('deleteUser', { id: user.id }) data-method='delete' rel='nofollow') Delete account

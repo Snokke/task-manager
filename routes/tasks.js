@@ -9,11 +9,9 @@ export default (router) => {
           { model: User, as: 'creator' },
         ],
       });
-      // const users = await User.findAll();
       ctx.render('tasks', { tasks });
     })
     .get('newTask', '/tasks/new', (ctx) => {
-      // const taskStatuses = TaskStatus.rawAttributes.name.values;
       const user = Task.build();
       ctx.render('tasks/new', { f: buildFormObj(user) });
     })
@@ -30,7 +28,7 @@ export default (router) => {
         ctx.render('tasks/new', { f: buildFormObj(task, e) });
       }
     })
-    .get('viewTask', '/tasks/view/:id', async (ctx) => {
+    .get('showTask', '/tasks/:id', async (ctx) => {
       const { id } = ctx.params;
       const task = await Task.findOne({
         where: {
@@ -40,9 +38,9 @@ export default (router) => {
           { model: User, as: 'creator' },
         ],
       });
-      ctx.render('tasks/view', { task });
+      ctx.render('tasks/show', { task });
     })
-    .get('editTask', '/tasks/edit/:id', async (ctx) => {
+    .get('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
       const task = await Task.findOne({
         where: {
@@ -55,7 +53,7 @@ export default (router) => {
       const status = ['New', 'In work', 'On testing', 'Done'];
       ctx.render('tasks/edit', { f: buildFormObj(task), task, status });
     })
-    .patch('editTask', '/tasks/edit/:id', async (ctx) => {
+    .patch('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
       const task = await Task.findOne({
         where: {
@@ -69,13 +67,13 @@ export default (router) => {
       try {
         task.update(data);
         ctx.flashMessage.notice = `Task #${task.id} has been updated`;
-        ctx.render('tasks/view', { task });
+        ctx.render('tasks/show', { task });
       } catch (e) {
         ctx.flashMessage.warning = `Unable to update task #${task.id}`;
         ctx.render('tasks/edit', { f: buildFormObj(task, e) });
       }
     })
-    .delete('deleteTask', '/tasks/edit/:id', async (ctx) => {
+    .delete('deleteTask', '/tasks/:id', async (ctx) => {
       const { id } = ctx.params;
       const task = await Task.findOne({
         where: {
@@ -88,6 +86,7 @@ export default (router) => {
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.flashMessage.warning = `Unable to delete task #${task.id}`;
+        ctx.render('users/edit', { f: buildFormObj(task), task });
       }
     });
 };

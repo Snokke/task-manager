@@ -16,6 +16,6 @@ block content
         tr
           td.align-middle= user.id
           td.align-middle
-            a(href=urlFor('viewUser', { id: user.id }))= user.fullName
+            a(href=urlFor('showUser', { id: user.id }))= user.fullName
           td.align-middle= user.email
           td.align-middle= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')

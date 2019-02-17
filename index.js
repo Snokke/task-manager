@@ -40,6 +40,7 @@ export default () => {
     ctx.state = {
       flashMessage: ctx.flashMessage,
       isSignedIn: () => ctx.session.userId !== undefined,
+      checkAccess: id => ctx.session.userId === id,
     };
     await next();
   });
