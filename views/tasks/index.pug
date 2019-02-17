@@ -1,16 +1,19 @@
 extends /layouts/application.pug
 
+block title
+  - const title = `Tasks`;
+
 block content
   if isSignedIn()
     a(class="btn btn-primary mb-3" role="button" href=urlFor('newTask') rel='nofollow') Create task
-  table.table.table-hover.table-sm
+  table.table.table-hover.shadow-sm
     thead.thead-light
       tr
         th(style="width: 5%") ID
-        th(style="width: 45%") Task
+        th(style="width: 35%" ) Task
         th(style="width: 10%") Status
-        th(style="width: 10%") Creator
-        th(style="width: 10%") Assigned to
+        th(style="width: 15%") Creator
+        th(style="width: 15%") Assigned to
         th(style="width: 10%") Tags
         th(style="width: 10%") Created
     tbody
@@ -18,9 +21,10 @@ block content
         tr
           td.align-middle= task.id
           td.align-middle
-            a.nav-link(href=urlFor('viewTask', { id: task.id }))= task.name
+            a(href=urlFor('viewTask', { id: task.id }))= task.name
           td.align-middle= task.status
-          td.align-middle= task.creator.fullName
+          td.align-middle
+            a(href=urlFor('viewUser', { id: task.creator.id }))= task.creator.fullName
           td.align-middle= task.assignedTo
           td.align-middle= task.tags
           td.align-middle= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')

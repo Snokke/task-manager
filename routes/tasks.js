@@ -9,6 +9,7 @@ export default (router) => {
           { model: User, as: 'creator' },
         ],
       });
+      // const users = await User.findAll();
       ctx.render('tasks', { tasks });
     })
     .get('newTask', '/tasks/new', (ctx) => {

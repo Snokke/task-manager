@@ -1,15 +1,18 @@
 extends /layouts/application.pug
 
+block title
+  - const title = 'Edit account';
+
 block content
   h3.mb-3.text-center.mt-3 Edit Account
   div.row.justify-content-center
     div.col-4
-      +formFor(f, { url: urlFor('edit'), method: 'patch' })
+      +formFor(f, { url: urlFor('editAccount'), method: 'patch' })
         +input(f, 'email', 'Email address')
         +input(f, 'firstName', 'First name')
         +input(f, 'lastName', 'Last name')
         +input(f, 'password', 'Password', { as: 'password' })
-        +button(f, 'Update account', 1)
+        +button(f, 'Update account', 'btn-block')
         .row.justify-content-center
           button(type="button" class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteUser") Delete account
 

@@ -1,5 +1,8 @@
 extends /layouts/application.pug
 
+block title
+  - const title = 'Create account';
+
 block content
   h3.mb-3.text-center.mt-3 Create Account
   div.row.justify-content-center
@@ -9,6 +12,6 @@ block content
         +input(f, 'firstName', 'First name')
         +input(f, 'lastName', 'Last name')
         +input(f, 'password', 'Password', { as: 'password' })
-        +button(f, 'Create account', 1)
+        +button(f, 'Create account', 'btn-block')
         p.text-center Have an account? 
           a(href=urlFor('newSession')) Log in

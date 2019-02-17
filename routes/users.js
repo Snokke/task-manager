@@ -29,7 +29,7 @@ export default (router) => {
         ctx.render('users/new', { f: buildFormObj(user, e) });
       }
     })
-    .get('edit', '/users/edit', async (ctx) => {
+    .get('editAccount', '/users/edit', async (ctx) => {
       const id = ctx.session.userId;
       const currentUser = await User.findOne({
         where: {
@@ -38,7 +38,7 @@ export default (router) => {
       });
       ctx.render('users/edit', { currentUser, f: buildFormObj(currentUser) });
     })
-    .patch('edit', '/users/edit', async (ctx) => {
+    .patch('editAccount', '/users/edit', async (ctx) => {
       const id = ctx.session.userId;
       const currentUser = await User.findOne({
         where: {
@@ -72,5 +72,14 @@ export default (router) => {
       } catch (e) {
         ctx.flashMessage.warning = 'Unable to delete user';
       }
+    })
+    .get('viewUser', '/user/view/:id', async (ctx) => {
+      const { id } = ctx.params;
+      const user = await User.findOne({
+        where: {
+          id,
+        },
+      });
+      ctx.render('users/view', { user });
     });
 };

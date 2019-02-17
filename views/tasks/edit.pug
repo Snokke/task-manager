@@ -1,5 +1,8 @@
 extends /layouts/application.pug
 
+block title
+  - const title = `Edit task #${task.id}`;
+
 block content
   h3.mb-3.text-center.mt-3 Edit task
   .row

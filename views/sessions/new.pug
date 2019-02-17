@@ -1,5 +1,8 @@
 extends /layouts/application.pug
 
+block title
+  - const title = `Sign in`;
+
 block content
   h3.mb-3.text-center.mt-3 Please sign in
   div.row.justify-content-center
@@ -7,5 +10,5 @@ block content
       +formFor(f, { url: urlFor('session'), method: 'post' })
         +input(f, 'email', 'Email address')
         +input(f, 'password', 'Password', { as: 'password' })
-        +button(f, 'Sign in', 1)
+        +button(f, 'Sign in', 'btn-block')
         

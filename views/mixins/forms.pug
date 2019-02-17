@@ -4,10 +4,10 @@ mixin formFor(f, options = {})
   - const url = _.get(options, 'url');
   - const method = _.get(options, 'method', 'get').toLowerCase();
   - const isStandart = _.includes(['get', 'post'], method);
-  form(action= url method= isStandart ? method : 'post')
-    if !isStandart
-      input(name='_method' type='hidden' value= method)
-    block
+    form(action= url method= isStandart ? method : 'post')
+      if !isStandart
+        input(name='_method' type='hidden' value= method)
+      block
 
 mixin inlineFormFor(f, options = {})
   - const url = _.get(options, 'url');
@@ -51,4 +51,4 @@ mixin inputSelect(array, text, options = { as: 'text' })
 
 mixin button(f, text, isBlock, type = 'submit')
   .form-group
-    input(class=(isBlock === undefined ? 'btn btn-primary' : 'btn btn-primary btn-block') type=`${type}` value=text)
+    input(class=(isBlock === 'btn-block' ? 'btn btn-primary btn-block' : 'btn btn-primary') type=`${type}` value=text)
