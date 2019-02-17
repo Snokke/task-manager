@@ -1,14 +1,13 @@
 const BitBarWebpackProgressPlugin = require('bitbar-webpack-progress-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const path = require('path');
-
-// const devMode = process.env.NODE_ENV !== 'production';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     main: ['./src/index.js'],
+    // vendor: ['jquery', 'jquery-ujs', 'popper.js', 'bootstrap'],
   },
   output: {
     path: path.join(__dirname, 'public', 'assets'),
@@ -24,22 +23,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader', 'postcss-loader'],
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'bundle.css',
-    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
     }),
+    new MiniCssExtractPlugin({
+      filename: 'bundle.css',
+    }),
     new BitBarWebpackProgressPlugin(),
-
   ],
 };
