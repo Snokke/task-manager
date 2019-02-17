@@ -7,7 +7,6 @@ module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     main: ['./src/index.js'],
-    // vendor: ['jquery', 'jquery-ujs', 'popper.js', 'bootstrap'],
   },
   output: {
     path: path.join(__dirname, 'public', 'assets'),
@@ -23,7 +22,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader'],
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
     ],
   },
