@@ -16,7 +16,7 @@ html(lang="en")
           li.nav-item.active
             a.nav-link(href=urlFor('users')) Users
           li.nav-item
-            a.nav-link(tabindex="-1" aria-disabled="true" href=urlFor('tasks')) Tasks
+            a.nav-link.disabled(tabindex="-1" aria-disabled="true" href=urlFor('tasks')) Tasks
         ul.navbar-nav
           if isSignedIn()
             li.nav-item
