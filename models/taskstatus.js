@@ -1,8 +1,7 @@
 export default (sequelize, DataTypes) => {
   const TaskStatus = sequelize.define('TaskStatus', {
     name: {
-      type: DataTypes.ENUM,
-      values: ['new', 'inWork', 'onTesting', 'done'],
+      type: DataTypes.STRING,
       validate: {
         notEmpty: true,
       },

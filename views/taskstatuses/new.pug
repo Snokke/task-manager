@@ -1,0 +1,18 @@
+extends /layouts/application.pug
+
+block title
+  - const title = 'Create task';
+
+block content
+  .row.justify-content-center
+    .card.shadow-sm(style="width: 400px")
+      .card-body
+        h3.mb-3.text-center.mt-3 Create new status
+        +formFor(f, { url: urlFor('taskstatuses'), method: 'post' })
+          +input(f, 'name', 'Task status')
+          .row
+            .col
+              +button(f, 'Create status')
+            .col.col-auto
+              a(class="btn btn-light" role="button" href=urlFor('taskstatuses') rel='nofollow') Cancel
+        

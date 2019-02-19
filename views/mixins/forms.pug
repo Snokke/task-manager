@@ -9,6 +9,18 @@ mixin formFor(f, options = {})
         input(name='_method' type='hidden' value= method)
       block
 
+mixin inlineFormFor(f, options = {})
+  - const url = _.get(options, 'url');
+  - const method = _.get(options, 'method', 'get').toLowerCase();
+  - const isStandart = _.includes(['get', 'post'], method);
+    form.form-inline(action= url method= isStandart ? method : 'post')
+      if !isStandart
+        input(name='_method' type='hidden' value= method)
+      block
+
+mixin inlineInput(f, object, property, options = { as: 'text' })
+    input(name=getInputName(f, property) class='form-control' type=options['as'] value=object[property])
+
 mixin dropdownInput(f, property, text, options = { as: 'text' })
   - const value = f.object[property] === undefined ? '' : f.object[property]
   .form-group(class=(f.errors[property] && 'has-danger'))

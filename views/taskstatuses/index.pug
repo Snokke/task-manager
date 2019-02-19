@@ -1,0 +1,25 @@
+extends /layouts/application.pug
+
+block title
+  - const title = `Task statuses`;
+
+block content
+  .row.justify-content-center
+    .card.shadow-sm(style="width: 420px")
+      .card-body
+        h3.text-center.mb-2 Task statuses
+        if(taskStatuses.length === 0)
+          p.text-center There is no any statuses
+        each taskStatus in taskStatuses
+          if isSignedIn()
+            +inlineFormFor(f, { url: urlFor('editTaskStatus', { id: taskStatus.id }), method: 'patch' })
+              .form-group.mx-sm-2.mb-2
+                +inlineInput(f, taskStatus, 'name')
+              button.btn.btn-primary.mb-2.mr-2(type="submit") Update
+              a.btn.btn-danger.mb-2.mr-2(role="button" href=urlFor('deleteTaskStatus', { id: taskStatus.id }) data-method='delete' rel='nofollow') Delete
+          else
+            .row.mx-sm-2.mb-2
+              input(type="text" class="form-control" value=taskStatus.name disabled)
+        if isSignedIn()
+          .row.justify-content-center.mt-4
+              a(class="btn btn-primary" role="button" href=urlFor('newTaskStatus') rel='nofollow') Add new status
