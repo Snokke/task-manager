@@ -11,10 +11,10 @@ block content
         +input(f, 'name')
         +inputArea(f, 'description', 'Description', 12)
         .row
-          .col-md-3
+          // .col-md-3
             +inputSelect(status, 'Status')
           .col-md-3
-            +inputSelect(status, 'Assigned to')
+            +inputSelect(f, 'assignedToId', users, 'Assigned to')
         +dropdownInput(f, 'tags', 'Tags')
         .row
           .col

@@ -29,6 +29,7 @@ export default () => {
     try {
       await next();
     } catch (err) {
+      console.log(err);
       rollbar.error(err, ctx.request);
     }
   });

@@ -33,12 +33,18 @@ mixin inputArea(f, property, text, rowsForArea, options = { as: 'text' })
     if f.errors[property]
       .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
 
-mixin inputSelect(array, text, options = { as: 'text' })
-  .form-group
+mixin inputSelect(f, property, data, text, options = { as: 'text' })
+  - const value = f.object[property] === undefined ? '' : f.object[property]
+  .form-group(class=(f.errors[property] && 'has-danger'))
     label(class=(text === undefined ? 'sr-only' : ''))= text
-    select(class='form-control' type=options['as']) 
-      each element in array
-        option= element
+    select(name=getInputName(f, property) class='form-control' type=options['as']) 
+      each element in data
+        if(element.value === value)
+          option(value=element.value selected)= element.name
+        else
+          option(value=element.value)= element.name
+    if f.errors[property]
+      .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
 
 mixin button(f, text, isBlock, type = 'submit')
   .form-group

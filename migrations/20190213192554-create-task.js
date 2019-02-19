@@ -22,8 +22,12 @@ module.exports = {
         key: 'id',
       },
     },
-    assignedTo: {
-      type: Sequelize.STRING,
+    assignedToId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
     },
     tags: {
       type: Sequelize.STRING,

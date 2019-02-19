@@ -20,11 +20,14 @@ export default (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    assignedTo: DataTypes.STRING,
+    assignedToId: {
+      type: DataTypes.INTEGER,
+    },
     tags: DataTypes.STRING,
   }, {});
   Task.associate = function(models) {
     Task.belongsTo(models.User, { as: 'creator', foreignKey: 'creatorId' });
+    Task.belongsTo(models.User, { as: 'assignedTo', foreignKey: 'assignedToId' });
     Task.belongsToMany(models.Tag, { through: 'TaskTags', foreignKey: 'taskId' });
   };
   return Task;

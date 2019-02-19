@@ -1,4 +1,3 @@
-const BitBarWebpackProgressPlugin = require('bitbar-webpack-progress-plugin');
 const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -35,6 +34,5 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'bundle.css',
     }),
-    new BitBarWebpackProgressPlugin(),
   ],
 };

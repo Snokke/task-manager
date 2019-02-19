@@ -15,8 +15,8 @@ html(lang="en")
         ul.navbar-nav.mr-auto
           li.nav-item.active
             a.nav-link(href=urlFor('users')) Users
-          li.nav-item
-            a.nav-link.disabled(tabindex="-1" aria-disabled="true" href=urlFor('tasks')) Tasks
+          li.nav-item.active
+            a.nav-link(href=urlFor('tasks')) Tasks
         ul.navbar-nav
           if isSignedIn()
             li.nav-item
@@ -26,7 +26,7 @@ html(lang="en")
               a.nav-link(href=urlFor('newSession')) Sign In
             li.nav-item
               a.nav-link(href=urlFor('newUser')) Sign Up
-    .container.mt-3
+    .container.mt-3.col-xl-6
       - var messages = flashMessage && flashMessage.messages
       - if (messages)
         - var messageKeys = Object.keys(messages)

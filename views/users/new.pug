@@ -4,14 +4,15 @@ block title
   - const title = 'Create account';
 
 block content
-  h3.mb-3.text-center.mt-3 Create Account
-  div.row.justify-content-center
-    div.col-4
-      +formFor(f, { url: urlFor('users'), method: 'post' })
-        +input(f, 'email', 'Email address')
-        +input(f, 'firstName', 'First name')
-        +input(f, 'lastName', 'Last name')
-        +input(f, 'password', 'Password', { as: 'password' })
-        +button(f, 'Create account', 'btn-block')
-        p.text-center Have an account? 
-          a(href=urlFor('newSession')) Log in
+  .row.justify-content-center
+    .card.shadow-sm(style="width: 400px")
+      .card-body
+        h3.text-center Create Account
+        +formFor(f, { url: urlFor('users'), method: 'post' })
+          +input(f, 'email', 'Email address')
+          +input(f, 'firstName', 'First name')
+          +input(f, 'lastName', 'Last name')
+          +input(f, 'password', 'Password', { as: 'password' })
+          +button(f, 'Create account', 'btn-block')
+          p.text-center Have an account? 
+            a(href=urlFor('newSession')) Log in

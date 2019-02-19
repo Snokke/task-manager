@@ -4,17 +4,18 @@ block title
   - const title = 'Edit account';
 
 block content
-  h3.mb-3.text-center.mt-3 Edit Account
-  div.row.justify-content-center
-    div.col-4
-      +formFor(f, { url: urlFor('editUser', { id: user.id }), method: 'patch' })
-        +input(f, 'email', 'Email address')
-        +input(f, 'firstName', 'First name')
-        +input(f, 'lastName', 'Last name')
-        +input(f, 'password', 'Password', { as: 'password' })
-        +button(f, 'Update account', 'btn-block')
-        .row.justify-content-center
-          button(type="button" class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteUser") Delete account
+  .row.justify-content-center
+    .card.shadow-sm(style="width: 400px")
+      .card-body
+        h3.text-center Edit Account
+        +formFor(f, { url: urlFor('editUser', { id: user.id }), method: 'patch' })
+          +input(f, 'email', 'Email address')
+          +input(f, 'firstName', 'First name')
+          +input(f, 'lastName', 'Last name')
+          +input(f, 'password', 'Password', { as: 'password' })
+          +button(f, 'Update account', 'btn-block')
+          .row.justify-content-center
+            button(type="button" class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteUser") Delete account
 
   div(class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-hidden="true")
     div(class="modal-dialog" role="document")

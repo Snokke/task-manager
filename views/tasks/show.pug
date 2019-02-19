@@ -27,7 +27,9 @@ block content
                 td= task.creator.fullName
               tr
                 td Assigned to
-                td= task.assignedTo
+                td
+                  if(task.assignedTo !== null)
+                    =task.assignedTo.fullName
               tr
                 td Created
                 td= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')

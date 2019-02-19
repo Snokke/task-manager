@@ -4,11 +4,11 @@ block title
   - const title = `Sign in`;
 
 block content
-  h3.mb-3.text-center.mt-3 Please sign in
-  div.row.justify-content-center
-    div.col-4
-      +formFor(f, { url: urlFor('session'), method: 'post' })
-        +input(f, 'email', 'Email address')
-        +input(f, 'password', 'Password', { as: 'password' })
-        +button(f, 'Sign in', 'btn-block')
-        
+  .row.justify-content-center
+    .card.shadow-sm(style="width: 400px")
+      .card-body
+        h3.text-center Please sign in
+        +formFor(f, { url: urlFor('session'), method: 'post' })
+          +input(f, 'email', 'Email address')
+          +input(f, 'password', 'Password', { as: 'password' })
+          +button(f, 'Sign in', 'btn-block')
