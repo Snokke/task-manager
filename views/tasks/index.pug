@@ -5,17 +5,17 @@ block title
 
 block content
   if isSignedIn()
-    a(class="btn btn-primary mb-3" role="button" href=urlFor('newTask') rel='nofollow') Create task
+    a.btn.btn-primary.mb-3(role="button" href=urlFor('newTask') rel='nofollow') Create task
   table.table.table-hover.shadow-sm
     thead.thead-light
       tr
-        th(style="width: 5%") ID
-        th(style="width: 35%" ) Task
-        th(style="width: 10%") Status
-        th(style="width: 15%") Creator
-        th(style="width: 15%") Assigned to
-        th(style="width: 10%") Tags
-        th(style="width: 10%") Created
+        th ID
+        th Task
+        th Status
+        th Creator
+        th Assigned to
+        th Tags
+        th Created
     tbody
       each task in tasks
         tr

@@ -5,7 +5,7 @@ block title
 
 block content
   .row.justify-content-center
-    .card.shadow-sm(style="width: 400px")
+    .card.shadow-sm
       .card-body
         h3.mb-3.text-center.mt-3 Create new status
         +formFor(f, { url: urlFor('taskstatuses'), method: 'post' })

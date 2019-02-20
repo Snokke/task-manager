@@ -4,28 +4,27 @@ block title
   - const title = `User ${user.fullName}`;
 
 block content
-  div.row.justify-content-center
-    div.col-4
-      .card
-        .card-header User info
-        .card-body
-          table.table
-            thead
-              tr
-                th(style="width: 50%") ID
-                th(style="width: 50%")= user.id
-            tbody
-              tr
-                td Email
-                td= user.email
-              tr
-                td First name
-                td= user.firstName
-              tr
-                td Last name
-                td= user.lastName
-              tr
-                td Created
-                td= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')
-          if (isSignedIn() && checkAccess(user.id))
-            a(href=urlFor('editUser', { id: user.id }) class="btn btn-primary") Edit user
+  .row.justify-content-center
+    .card
+      .card-header User info
+      .card-body
+        table.table
+          thead
+            tr
+              th ID
+              th= user.id
+          tbody
+            tr
+              td Email
+              td= user.email
+            tr
+              td First name
+              td= user.firstName
+            tr
+              td Last name
+              td= user.lastName
+            tr
+              td Created
+              td= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')
+        if (isSignedIn() && checkAccess(user.id))
+          a(href=urlFor('editUser', { id: user.id }) class="btn btn-primary") Edit user

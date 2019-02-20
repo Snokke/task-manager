@@ -5,9 +5,9 @@ block title
 
 block content
   .row.justify-content-center
-    .card.shadow-sm(style="width: 400px")
+    .card
       .card-body
-        h3.text-center Please sign in
+        h3.text-center Please sign in to Task Manager
         +formFor(f, { url: urlFor('session'), method: 'post' })
           +input(f, 'email', 'Email address')
           +input(f, 'password', 'Password', { as: 'password' })
