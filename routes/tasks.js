@@ -99,7 +99,7 @@ export default (router) => {
         data.assignedToId = null;
       }
       try {
-        task.update(data);
+        await task.update(data);
         task = await Task.findOne({
           where: {
             id,
