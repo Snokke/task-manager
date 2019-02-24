@@ -17,24 +17,12 @@ module.exports = {
     },
     creatorId: {
       type: Sequelize.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'id',
-      },
     },
     assignedToId: {
       type: Sequelize.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'id',
-      },
     },
     taskStatusId: {
       type: Sequelize.INTEGER,
-      references: {
-        model: 'TaskStatuses',
-        key: 'id',
-      },
     },
     createdAt: {
       allowNull: false,
