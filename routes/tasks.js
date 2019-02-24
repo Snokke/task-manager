@@ -6,7 +6,7 @@ import {
 
 const getTags = async (tags) => {
   const tagsInstances = await Promise.all(tags
-    .map(name => Tag.findOrCreate({ where: { name } })));
+    .map(name => Tag.findCreateFind({ where: { name } }))); // findOrCreate works only with Postgres
   return tagsInstances.map(([tag]) => tag.id);
 };
 
