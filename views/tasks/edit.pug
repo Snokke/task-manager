@@ -6,23 +6,24 @@ block title
 block content
   h3.mb-3.text-center.mt-3 Edit task
   .row
-    .col-9
+    .col-8
       +formFor(f, { url: urlFor('editTask', { id: task.id }), method: 'patch' })
         +input(f, 'name')
         +inputArea(f, 'description', 'Description', 12)
         .row
-          // .col-md-3
-            +inputSelect(status, 'Status')
+          .col-md-2
+            +inputSelect(f, 'taskStatusId', taskStatuses, 'Status')
           .col-md-3
             +inputSelect(f, 'assignedToId', users, 'Assigned to')
-        +dropdownInput(f, 'tags', 'Tags')
+          .col-md-7
+            +dropdownInput(f, 'tags', 'Tags')
         .row
           .col
             +button(f, 'Update task')
           .col.col-auto
             a(class="btn btn-light" role="button" href=urlFor('tasks') rel='nofollow') Cancel
             
-    .col-sm-3
+    .col-sm-4
       .card
         .card-header Task info
         .card-body

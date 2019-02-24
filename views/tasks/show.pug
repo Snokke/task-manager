@@ -5,11 +5,11 @@ block title
 
 block content
   .row
-    .col-sm-9
+    .col-sm-8
       h2= task.name
       hr
       p!= task.description.replace(/\n/g, '<br />')
-    .col-sm-3
+    .col-sm-4
       .card
         .card-header Task info
         .card-body
@@ -21,15 +21,21 @@ block content
             tbody
               tr
                 td Status
-                td= task.status
+                td
+                  if isSignedIn()
+                    +formFor(f, { url: urlFor('editTask', { id: task.id }), method: 'patch' })
+                      +inputSelectOnchange(f, 'taskStatusId', taskStatuses)
+                  else
+                    =task.taskStatus.name
               tr
                 td Creator
-                td= task.creator.fullName
+                td
+                  a(href=urlFor('showUser', { id: task.creator.id }))= task.creator.fullName
               tr
                 td Assigned to
                 td
                   if(task.assignedTo !== null)
-                    =task.assignedTo.fullName
+                    a(href=urlFor('showUser', { id: task.assignedTo.id }))= task.assignedTo.fullName
               tr
                 td Created
                 td= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')
@@ -38,6 +44,6 @@ block content
                 td= formatDate(new Date(task.updatedAt), 'HH:mm DD.MM.YYYY')  
               tr
                 td Tags
-                td= task.tags
+                td
           if isSignedIn() 
             a(href=urlFor('editTask', { id: task.id }) class="btn btn-primary") Edit task

@@ -9,3 +9,4 @@ public/assets
 .history
 .env
 coverage
+.DS_Store

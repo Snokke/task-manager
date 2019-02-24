@@ -1,6 +1,14 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import getUsersForSelectInput from '../lib/utils';
-import { User, Task } from '../models';
+import { getUsersForSelectInput, getStatusesForSelectInput } from '../lib/utils';
+import {
+  User, Task, TaskStatus, Tag,
+} from '../models';
+
+const getTags = async (tags) => {
+  const tagsInstances = await Promise.all(tags
+    .map(name => Tag.findCreateFind({ where: { name } })));
+  return tagsInstances.map(([tag]) => tag.id);
+};
 
 export default (router) => {
   router
@@ -9,6 +17,7 @@ export default (router) => {
         include: [
           { model: User, as: 'creator' },
           { model: User, as: 'assignedTo' },
+          { model: TaskStatus, as: 'taskStatus' },
         ],
       });
       ctx.render('tasks', { tasks });
@@ -16,7 +25,8 @@ export default (router) => {
     .get('newTask', '/tasks/new', async (ctx) => {
       const task = Task.build();
       const users = await getUsersForSelectInput(User);
-      ctx.render('tasks/new', { f: buildFormObj(task), users });
+      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      ctx.render('tasks/new', { f: buildFormObj(task), users, taskStatuses });
     })
     .post('tasks', '/tasks', async (ctx) => {
       const { userId } = ctx.session;
@@ -25,13 +35,18 @@ export default (router) => {
       if (form.assignedToId === '') {
         form.assignedToId = null;
       }
+      const tagsNames = form.tags.split(' ').filter(t => t);
       const task = Task.build(form);
       try {
         await task.save();
+        const tags = await getTags(tagsNames);
+        await task.setTags(tags);
         ctx.flashMessage.notice = 'Task has been created';
         ctx.redirect(router.url('tasks'));
       } catch (e) {
-        ctx.render('tasks/new', { f: buildFormObj(task, e) });
+        ctx.flashMessage.warning = 'Cannot create task';
+        ctx.redirect(router.url('tasks'));
+        // ctx.render('tasks/new', { f: buildFormObj(task, e) });
       }
     })
     .get('showTask', '/tasks/:id', async (ctx) => {
@@ -43,9 +58,11 @@ export default (router) => {
         include: [
           { model: User, as: 'creator' },
           { model: User, as: 'assignedTo' },
+          { model: TaskStatus, as: 'taskStatus' },
         ],
       });
-      ctx.render('tasks/show', { task });
+      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
     })
     .get('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
@@ -58,31 +75,48 @@ export default (router) => {
         ],
       });
       const users = await getUsersForSelectInput(User);
-      ctx.render('tasks/edit', { f: buildFormObj(task), task, users });
+      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      ctx.render('tasks/edit', {
+        f: buildFormObj(task), task, users, taskStatuses,
+      });
     })
     .patch('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.findOne({
+      let task = await Task.findOne({
         where: {
           id,
         },
         include: [
           { model: User, as: 'creator' },
           { model: User, as: 'assignedTo' },
+          { model: TaskStatus, as: 'taskStatus' },
         ],
       });
       const users = await getUsersForSelectInput(User);
+      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
       const data = ctx.request.body.form;
       if (data.assignedToId === '') {
         data.assignedToId = null;
       }
       try {
         task.update(data);
+        task = await Task.findOne({
+          where: {
+            id,
+          },
+          include: [
+            { model: User, as: 'creator' },
+            { model: User, as: 'assignedTo' },
+            { model: TaskStatus, as: 'taskStatus' },
+          ],
+        });
         ctx.flashMessage.notice = `Task #${task.id} has been updated`;
-        ctx.render('tasks/show', { task });
+        ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
       } catch (e) {
         ctx.flashMessage.warning = `Unable to update task #${task.id}`;
-        ctx.render('tasks/edit', { f: buildFormObj(task, e), task, users });
+        ctx.render('tasks/edit', {
+          f: buildFormObj(task, e), task, users, taskStatuses,
+        });
       }
     })
     .delete('deleteTask', '/tasks/:id', async (ctx) => {
@@ -98,7 +132,7 @@ export default (router) => {
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.flashMessage.warning = `Unable to delete task #${task.id}`;
-        ctx.render('users/edit', { f: buildFormObj(task), task });
+        ctx.render('users/edit', { f: buildFormObj(task, e), task });
       }
     });
 };

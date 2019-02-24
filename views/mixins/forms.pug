@@ -58,6 +58,15 @@ mixin inputSelect(f, property, data, text, options = { as: 'text' })
     if f.errors[property]
       .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
 
+mixin inputSelectOnchange(f, property, data, options = { as: 'text' })
+  - const value = f.object[property] === undefined ? '' : f.object[property]
+  select(name=getInputName(f, property) class='form-control form-control-sm' type=options['as'] onchange='this.form.submit()') 
+    each element in data
+      if(element.value === value)
+        option(value=element.value selected)= element.name
+      else
+        option(value=element.value)= element.name
+
 mixin button(f, text, isBlock, type = 'submit')
   .form-group
     input(class=(isBlock === 'btn-block' ? 'btn btn-primary btn-block' : 'btn btn-primary') type=`${type}` value=text)

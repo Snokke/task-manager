@@ -10,7 +10,7 @@ module.exports = {
       type: Sequelize.STRING,
     },
     description: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
     },
     status: {
       type: Sequelize.STRING,
@@ -29,8 +29,12 @@ module.exports = {
         key: 'id',
       },
     },
-    tags: {
-      type: Sequelize.STRING,
+    taskStatusId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'TaskStatuses',
+        key: 'id',
+      },
     },
     createdAt: {
       allowNull: false,

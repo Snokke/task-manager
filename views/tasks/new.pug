@@ -6,15 +6,17 @@ block title
 block content
   h3.mb-3.text-center.mt-3 Create new task
   div.row.justify-content-center
-    div.col-6
+    div.col-7
       +formFor(f, { url: urlFor('tasks'), method: 'post' })
         +input(f, 'name', 'Task')
-        +inputArea(f, 'description', 'Description', 10)
-        +inputSelect(f, 'assignedToId', users, 'Assigned to')
-        //+input(f, 'tags', 'Tags')
+        +inputArea(f, 'description', 'Description', 12)
         .row
-          .col
-            +button(f, 'Create task')
+          .col-md-6
+            +inputSelect(f, 'taskStatusId', taskStatuses, 'Status')
+          .col-md-6
+            +inputSelect(f, 'assignedToId', users, 'Assigned to')
+        +input(f, 'tags', 'Tags')
+        +button(f, 'Create task')
           .col.col-auto
             a(class="btn btn-light" role="button" href=urlFor('tasks') rel='nofollow') Cancel
         

@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
     }
   }, {});
   TaskStatus.associate = function(models) {
-    // associations can be defined here
+    TaskStatus.hasOne(models.Task, { as: 'taskStatus', foreignKey: 'taskStatusId' });
   };
   return TaskStatus;
 };

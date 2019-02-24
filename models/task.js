@@ -6,15 +6,14 @@ export default (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    description: DataTypes.STRING,
-    status: {
-      type: DataTypes.STRING,
-      defaultValue: 'new',
+    description: DataTypes.TEXT,
+    creatorId: {
+      type: DataTypes.INTEGER,
       validate: {
         notEmpty: true,
       },
     },
-    creatorId: {
+    taskStatusId: {
       type: DataTypes.INTEGER,
       validate: {
         notEmpty: true,
@@ -23,11 +22,11 @@ export default (sequelize, DataTypes) => {
     assignedToId: {
       type: DataTypes.INTEGER,
     },
-    tags: DataTypes.STRING,
   }, {});
   Task.associate = function(models) {
     Task.belongsTo(models.User, { as: 'creator', foreignKey: 'creatorId' });
     Task.belongsTo(models.User, { as: 'assignedTo', foreignKey: 'assignedToId' });
+    Task.belongsTo(models.TaskStatus, { as: 'taskStatus', foreignKey: 'taskStatusId' });
     Task.belongsToMany(models.Tag, { through: 'TaskTags', foreignKey: 'taskId' });
   };
   return Task;

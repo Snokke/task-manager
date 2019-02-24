@@ -43,7 +43,7 @@ export default (router) => {
         email, firstName, lastName, password,
       } = ctx.request.body.form;
       if (user.passwordDigest === encrypt(password)) {
-        user.update({ email, firstName, lastName });
+        await user.update({ email, firstName, lastName });
         ctx.flashMessage.notice = `User ${email} has been updated`;
         ctx.redirect(router.url('root'));
         return;
@@ -60,8 +60,8 @@ export default (router) => {
       });
       try {
         await user.destroy();
-        ctx.session = {};
         ctx.flashMessage.notice = 'User has been deleted';
+        ctx.session = {};
         ctx.redirect(router.url('root'));
       } catch (e) {
         ctx.flashMessage.warning = `Unable to delete user ${user.email}`;
