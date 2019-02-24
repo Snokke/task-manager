@@ -31,10 +31,6 @@ module.exports = {
     },
     taskStatusId: {
       type: Sequelize.INTEGER,
-      references: {
-        model: 'TaskStatuses',
-        key: 'id',
-      },
     },
     createdAt: {
       allowNull: false,
