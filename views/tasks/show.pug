@@ -23,7 +23,7 @@ block content
                 td Status
                 td
                   if isSignedIn()
-                    +formFor(f, { url: urlFor('editTask', { id: task.id }), method: 'patch' })
+                    +formFor(f, { url: urlFor('updateTaskStatus', { id: task.id }), method: 'patch' })
                       +inputSelectOnchange(f, 'taskStatusId', taskStatuses)
                   else
                     =task.taskStatus.name
