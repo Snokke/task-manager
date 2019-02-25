@@ -28,5 +28,8 @@ block content
           td.align-middle
             if(task.assignedTo !== null)
               a(href=urlFor('showUser', { id: task.assignedTo.id }))= task.assignedTo.fullName
-          td.align-middle Test
+          td.align-middle
+            each tag in task.tags
+              span.badge.badge-pill.badge-success= tag.name
+              span  
           td.align-middle= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')

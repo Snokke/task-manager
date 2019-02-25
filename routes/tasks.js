@@ -1,14 +1,10 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import { getUsersForSelectInput, getStatusesForSelectInput } from '../lib/utils';
+import {
+  getUsersForSelectInput, getStatusesForSelectInput, getTags, parseTags,
+} from '../lib/utils';
 import {
   User, Task, TaskStatus, Tag,
 } from '../models';
-
-const getTags = async (tags) => {
-  const tagsInstances = await Promise.all(tags
-    .map(name => Tag.findCreateFind({ where: { name } }))); // findOrCreate works only with Postgres
-  return tagsInstances.map(([tag]) => tag.id);
-};
 
 export default (router) => {
   router
@@ -18,6 +14,7 @@ export default (router) => {
           { model: User, as: 'creator' },
           { model: User, as: 'assignedTo' },
           { model: TaskStatus, as: 'taskStatus' },
+          { model: Tag, as: 'tags' },
         ],
       });
       ctx.render('tasks', { tasks });
@@ -31,22 +28,22 @@ export default (router) => {
     .post('tasks', '/tasks', async (ctx) => {
       const { userId } = ctx.session;
       const { form } = ctx.request.body;
+      const tagString = form.tags;
       form.creatorId = userId;
       if (form.assignedToId === '') {
         form.assignedToId = null;
       }
-      const tagsNames = form.tags.split(' ').filter(t => t);
+      const tagsNames = parseTags(tagString);
       const task = Task.build(form);
       try {
         await task.save();
-        const tags = await getTags(tagsNames);
+        const tags = await getTags(Tag, tagsNames);
         await task.setTags(tags);
         ctx.flashMessage.notice = 'Task has been created';
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.flashMessage.warning = 'Cannot create task';
-        ctx.redirect(router.url('tasks'));
-        // ctx.render('tasks/new', { f: buildFormObj(task, e) });
+        ctx.render('tasks/new', { f: buildFormObj(task, e) });
       }
     })
     .get('showTask', '/tasks/:id', async (ctx) => {
@@ -59,6 +56,7 @@ export default (router) => {
           { model: User, as: 'creator' },
           { model: User, as: 'assignedTo' },
           { model: TaskStatus, as: 'taskStatus' },
+          { model: Tag, as: 'tags' },
         ],
       });
       const taskStatuses = await getStatusesForSelectInput(TaskStatus);
@@ -72,6 +70,7 @@ export default (router) => {
         },
         include: [
           { model: User, as: 'creator' },
+          { model: Tag, as: 'tags' },
         ],
       });
       const users = await getUsersForSelectInput(User);
@@ -82,6 +81,7 @@ export default (router) => {
     })
     .patch('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
+      const tagString = ctx.request.body.form.tags;
       let task = await Task.findOne({
         where: {
           id,
@@ -90,8 +90,10 @@ export default (router) => {
           { model: User, as: 'creator' },
           { model: User, as: 'assignedTo' },
           { model: TaskStatus, as: 'taskStatus' },
+          { model: Tag, as: 'tags' },
         ],
       });
+      const tagsNames = parseTags(tagString);
       const users = await getUsersForSelectInput(User);
       const taskStatuses = await getStatusesForSelectInput(TaskStatus);
       const data = ctx.request.body.form;
@@ -100,6 +102,8 @@ export default (router) => {
       }
       try {
         await task.update(data);
+        const tags = await getTags(Tag, tagsNames);
+        await task.setTags(tags);
         task = await Task.findOne({
           where: {
             id,
@@ -108,6 +112,7 @@ export default (router) => {
             { model: User, as: 'creator' },
             { model: User, as: 'assignedTo' },
             { model: TaskStatus, as: 'taskStatus' },
+            { model: Tag, as: 'tags' },
           ],
         });
         ctx.flashMessage.notice = `Task #${task.id} has been updated`;

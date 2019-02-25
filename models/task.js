@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
     Task.belongsTo(models.User, { as: 'creator', foreignKey: 'creatorId' });
     Task.belongsTo(models.User, { as: 'assignedTo', foreignKey: 'assignedToId' });
     Task.belongsTo(models.TaskStatus, { as: 'taskStatus', foreignKey: 'taskStatusId' });
-    Task.belongsToMany(models.Tag, { through: 'TaskTags', foreignKey: 'taskId' });
+    Task.belongsToMany(models.Tag, { as: 'tags', through: 'TaskTags', foreignKey: 'taskId' });
   };
   return Task;
 };

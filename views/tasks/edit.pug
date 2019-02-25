@@ -16,7 +16,7 @@ block content
           .col-md-3
             +inputSelect(f, 'assignedToId', users, 'Assigned to')
           .col-md-7
-            +dropdownInput(f, 'tags', 'Tags')
+            +inputForTags(f, 'tags', 'Tags')
         .row
           .col
             +button(f, 'Update task')

@@ -21,11 +21,11 @@ mixin inlineFormFor(f, options = {})
 mixin inlineInput(f, object, property, options = { as: 'text' })
     input(name=getInputName(f, property) class='form-control' type=options['as'] value=object[property])
 
-mixin dropdownInput(f, property, text, options = { as: 'text' })
-  - const value = f.object[property] === undefined ? '' : f.object[property]
+mixin inputForTags(f, property, text, options = { as: 'text' })
+  - const value = f.object[property] === undefined ? '' : f.object[property].map(tag => tag.name)
   .form-group(class=(f.errors[property] && 'has-danger'))
     label(class=(text === undefined ? 'sr-only' : ''))= text
-    input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`) 
+    input(name=getInputName(f, property) class='form-control' type=options['as'] value=`${value}`.replace(/,/g, ' ')) 
     if f.errors[property]
       .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
 
