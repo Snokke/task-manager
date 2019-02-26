@@ -114,7 +114,7 @@ export default (router) => {
         ctx.flashMessage.notice = `Status has been updated to "${task.taskStatus.name}"`;
         ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
       } catch (e) {
-        ctx.flashMessage.warning = `Unable to update task #${task.id}`;
+        ctx.flashMessage.warning = `Unable to update status #${task.id}`;
         ctx.render('tasks/show', { f: buildFormObj(task, e), task, taskStatuses });
       }
     })
