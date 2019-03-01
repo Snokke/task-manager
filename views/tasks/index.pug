@@ -4,8 +4,25 @@ block title
   - const title = `Tasks`;
 
 block content
-  if isSignedIn()
-    a.btn.btn-primary.mb-3(role="button" href=urlFor('newTask') rel='nofollow') Create task
+  .row
+    .col-md-2.align-self-end
+      if isSignedIn()
+        a.btn.btn-primary.mb-3(role="button" href=urlFor('newTask') rel='nofollow') Create task
+    .col
+      +formFor(f, { url: urlFor('tasks'), method: 'get' })
+        .row.justify-content-end
+          .col-md-2.align-self-end
+            .row.justify-content-end
+              if isSignedIn()
+                +inlineInputSelectOnchange(f, 'myTasks', myTasks, 'My tasks', filterQuery.myTasks)
+          .col-md-7
+              .row
+                .col-md-3.align-self-end
+                  +inlineInputSelectOnchange(f, 'taskStatusId', taskStatuses, 'Status', filterQuery.taskStatusId)
+                .col-md-4.align-self-end
+                  +inlineInputSelectOnchange(f, 'assignedToId', users, 'Assigned to', filterQuery.assignedToId)
+                .col-md-4.align-self-end
+                  +mulitpleInputSelectOnchange(f, 'tags', tags, 'Tags', filterQuery.tags)     
   table.table.table-hover.shadow-sm
     thead.thead-light
       tr
@@ -33,3 +50,6 @@ block content
               span.badge.badge-pill.badge-success= tag.name
               span  
           td.align-middle= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')
+  if (countTasks === 0)
+    .row.justify-content-center
+      p No tasks found

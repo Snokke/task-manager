@@ -22,7 +22,25 @@ export default (sequelize, DataTypes) => {
     assignedToId: {
       type: DataTypes.INTEGER,
     },
-  }, {});
+  }, {
+    scopes: {
+      filterByTaskStatusId: id => ({
+        where: {
+          taskStatusId: id,
+        },
+      }),
+      filterByAssignedToId: id => ({
+        where: {
+          assignedToId: id,
+        },
+      }),
+      filterByMyTasks: id => ({
+        where: {
+          creatorId: id,
+        },
+      }),
+    },
+  });
   Task.associate = function(models) {
     Task.belongsTo(models.User, { as: 'creator', foreignKey: 'creatorId' });
     Task.belongsTo(models.User, { as: 'assignedTo', foreignKey: 'assignedToId' });
@@ -30,7 +48,18 @@ export default (sequelize, DataTypes) => {
     Task.belongsToMany(models.Tag, { as: 'tags', through: 'TaskTags', foreignKey: 'taskId' });
     Task.addScope('allAssociations', {
       include: ['creator', 'assignedTo', 'taskStatus', 'tags'],
-    });
+    }),
+    Task.addScope('filterByTags', ids => ({
+      include: [{
+        model: models.Tag,
+        as: 'tags',
+        where: {
+          id: {
+            [sequelize.Op.in]: ids,
+          },
+        }
+      }]
+    }));
   };
   return Task;
 };

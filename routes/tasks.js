@@ -1,6 +1,6 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import {
-  getUsersForSelectInput, getStatusesForSelectInput, getTags, parseTags,
+  getObjectForSelectInput, getTags, parseTags, getScopesForFilter,
 } from '../lib/utils';
 import {
   User, Task, TaskStatus, Tag,
@@ -9,13 +9,25 @@ import {
 export default (router) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
-      const tasks = await Task.scope('allAssociations').findAll();
-      ctx.render('tasks', { tasks });
+      const filterQuery = ctx.request.query;
+      const creatorId = ctx.session.userId;
+      const scopes = getScopesForFilter(filterQuery, creatorId);
+      const { rows: tasks, count: countTasks } = await Task.scope(scopes).findAndCountAll();
+      const users = await getObjectForSelectInput(User, 'fullName', 1, 'All');
+      const tags = await getObjectForSelectInput(Tag, 'name');
+      const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name', 1, 'All');
+      const myTasks = [
+        { value: 'All', name: 'All' },
+        { value: 1, name: 'My tasks' },
+      ];
+      ctx.render('tasks', {
+        f: buildFormObj(tasks), filterQuery, tasks, users, taskStatuses, tags, countTasks, myTasks,
+      });
     })
     .get('newTask', '/tasks/new', async (ctx) => {
       const task = Task.build();
-      const users = await getUsersForSelectInput(User);
-      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      const users = await getObjectForSelectInput(User, 'fullName', 1);
+      const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/new', { f: buildFormObj(task), users, taskStatuses });
     })
     .post('tasks', '/tasks', async (ctx) => {
@@ -46,7 +58,7 @@ export default (router) => {
           id,
         },
       });
-      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
     })
     .get('editTask', '/tasks/:id/edit', async (ctx) => {
@@ -56,8 +68,8 @@ export default (router) => {
           id,
         },
       });
-      const users = await getUsersForSelectInput(User);
-      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      const users = await getObjectForSelectInput(User, 'fullName', 1);
+      const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/edit', {
         f: buildFormObj(task), task, users, taskStatuses,
       });
@@ -71,8 +83,8 @@ export default (router) => {
         },
       });
       const tagsNames = parseTags(tagString);
-      const users = await getUsersForSelectInput(User);
-      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      const users = await getObjectForSelectInput(User, 'fullName', 1);
+      const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       const data = ctx.request.body.form;
       if (data.assignedToId === '') {
         data.assignedToId = null;
@@ -102,7 +114,7 @@ export default (router) => {
           id,
         },
       });
-      const taskStatuses = await getStatusesForSelectInput(TaskStatus);
+      const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       const newStatus = ctx.request.body.form;
       try {
         await task.update(newStatus);

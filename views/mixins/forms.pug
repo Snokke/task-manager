@@ -19,7 +19,7 @@ mixin inlineFormFor(f, options = {})
       block
 
 mixin inlineInput(f, object, property, options = { as: 'text' })
-    input(name=getInputName(f, property) class='form-control' type=options['as'] value=object[property])
+  input(name=getInputName(f, property) class='form-control' type=options['as'] value=object[property])
 
 mixin inputForTags(f, property, text, options = { as: 'text' })
   - const value = f.object[property] === undefined ? '' : f.object[property].map(tag => tag.name)
@@ -57,6 +57,27 @@ mixin inputSelect(f, property, data, text, options = { as: 'text' })
           option(value=element.value)= element.name
     if f.errors[property]
       .form-control-feedback.text-danger= f.errors[property].map(({ message }) => message).join('. ')
+
+mixin inlineInputSelectOnchange(f, property, data, text, currentValue,  options = { as: 'text' })
+  .form-group
+    label(class=(text === undefined ? 'sr-only' : ''))= text
+    select(name=property class='form-control' type=options['as'] onchange='this.form.submit()') 
+      each element in data
+        if(element.value == currentValue)
+          option(value=element.value selected)= element.name
+        else
+          option(value=element.value)= element.name
+
+mixin mulitpleInputSelectOnchange(f, property, data, text, currentValues, options = { as: 'text' })
+  .form-group
+    label(class=(text === undefined ? 'sr-only' : ''))= text
+    select(name=property class='form-control select2' type=options['as'] multiple onchange='this.form.submit()' style='display:none')
+      each element in data
+        - const isSelected = Array.isArray(currentValues) ? currentValues.includes(String(element.value)) : Number(currentValues) === element.value;
+        if(isSelected)
+          option(value=element.value selected)= element.name
+        else
+          option(value=element.value)= element.name
 
 mixin inputSelectOnchange(f, property, data, options = { as: 'text' })
   - const value = f.object[property] === undefined ? '' : f.object[property]
