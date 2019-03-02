@@ -25,20 +25,12 @@ export default (router) => {
     })
     .get('editUser', '/users/:id/edit', async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findOne({
-        where: {
-          id,
-        },
-      });
+      const user = await User.findById(id);
       ctx.render('users/edit', { user, f: buildFormObj(user) });
     })
     .patch('editUser', '/users/:id/edit', async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findOne({
-        where: {
-          id,
-        },
-      });
+      const user = await User.findById(id);
       const {
         email, firstName, lastName, password,
       } = ctx.request.body.form;
@@ -53,11 +45,7 @@ export default (router) => {
     })
     .delete('deleteUser', '/users/:id', async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findOne({
-        where: {
-          id,
-        },
-      });
+      const user = await User.findById(id);
       try {
         await user.destroy();
         ctx.flashMessage.notice = 'User has been deleted';
@@ -70,11 +58,7 @@ export default (router) => {
     })
     .get('showUser', '/user/:id', async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findOne({
-        where: {
-          id,
-        },
-      });
+      const user = await User.findById(id);
       ctx.render('users/show', { user });
     });
 };

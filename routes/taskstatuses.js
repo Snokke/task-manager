@@ -26,11 +26,7 @@ export default (router) => {
     })
     .patch('editTaskStatus', '/taskstatuses/:id', async (ctx) => {
       const { id } = ctx.params;
-      const taskStatus = await TaskStatus.findOne({
-        where: {
-          id,
-        },
-      });
+      const taskStatus = await TaskStatus.findById(id);
       const minTaskStatusId = await TaskStatus.min('id');
       const data = ctx.request.body.form;
       try {
@@ -46,11 +42,7 @@ export default (router) => {
     })
     .delete('deleteTaskStatus', '/taskstatuses/:id', async (ctx) => {
       const { id } = ctx.params;
-      const taskStatus = await TaskStatus.findOne({
-        where: {
-          id,
-        },
-      });
+      const taskStatus = await TaskStatus.findById(id);
       const minTaskStatusId = await TaskStatus.min('id');
       try {
         await taskStatus.destroy();

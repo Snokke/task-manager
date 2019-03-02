@@ -3,17 +3,18 @@ import matchers from 'jest-supertest-matchers';
 import faker from 'faker';
 
 import { User, sequelize } from '../models';
+import { getCookie } from './lib/utils';
 import app from '..';
+
+const user = {
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+};
 
 describe('user', () => {
   let server;
-
-  const user = {
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
-  };
 
   beforeAll(async () => {
     expect.extend(matchers);
@@ -48,10 +49,7 @@ describe('user', () => {
       password: user.password,
     };
 
-    const resAuth = await request.agent(server)
-      .post('/session')
-      .send({ form: { email: user.email, password: user.password } });
-    const cookie = resAuth.headers['set-cookie'];
+    const cookie = getCookie(server, user);
     const { id } = await User.findOne({ where: { email: user.email } });
     const res = await request.agent(server)
       .patch(`/users/${id}/edit`)
@@ -62,10 +60,7 @@ describe('user', () => {
   });
 
   it('Delete account', async () => {
-    const resAuth = await request.agent(server)
-      .post('/session')
-      .send({ form: { email: user.email, password: user.password } });
-    const cookie = resAuth.headers['set-cookie'];
+    const cookie = getCookie(server, user);
     const { id } = await User.findOne({ where: { email: user.email } });
     const res = await request.agent(server)
       .delete(`/users/${id}`)

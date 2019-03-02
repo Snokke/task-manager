@@ -53,21 +53,13 @@ export default (router) => {
     })
     .get('showTask', '/tasks/:id', async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.scope('allAssociations').findOne({
-        where: {
-          id,
-        },
-      });
+      const task = await Task.scope('allAssociations').findById(id);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
     })
     .get('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.scope('allAssociations').findOne({
-        where: {
-          id,
-        },
-      });
+      const task = await Task.scope('allAssociations').findById(id);
       const users = await getObjectForSelectInput(User, 'fullName', 1);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/edit', {
@@ -77,11 +69,7 @@ export default (router) => {
     .patch('editTask', '/tasks/:id/edit', async (ctx) => {
       const { id } = ctx.params;
       const tagString = ctx.request.body.form.tags;
-      let task = await Task.scope('allAssociations').findOne({
-        where: {
-          id,
-        },
-      });
+      let task = await Task.scope('allAssociations').findById(id);
       const tagsNames = parseTags(tagString);
       const users = await getObjectForSelectInput(User, 'fullName', 1);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
@@ -93,11 +81,7 @@ export default (router) => {
         await task.update(data);
         const tags = await getTags(Tag, tagsNames);
         await task.setTags(tags);
-        task = await Task.scope('allAssociations').findOne({
-          where: {
-            id,
-          },
-        });
+        task = await Task.scope('allAssociations').findById(id);
         ctx.flashMessage.notice = `Task #${task.id} has been updated`;
         ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
       } catch (e) {
@@ -109,20 +93,12 @@ export default (router) => {
     })
     .patch('updateTaskStatus', '/tasks/:id/editstatus', async (ctx) => {
       const { id } = ctx.params;
-      let task = await Task.scope('allAssociations').findOne({
-        where: {
-          id,
-        },
-      });
+      let task = await Task.scope('allAssociations').findById(id);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       const newStatus = ctx.request.body.form;
       try {
         await task.update(newStatus);
-        task = await Task.scope('allAssociations').findOne({
-          where: {
-            id,
-          },
-        });
+        task = await Task.scope('allAssociations').findById(id);
         ctx.flashMessage.notice = `Status has been updated to "${task.taskStatus.name}"`;
         ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
       } catch (e) {
@@ -132,11 +108,7 @@ export default (router) => {
     })
     .delete('deleteTask', '/tasks/:id', async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.findOne({
-        where: {
-          id,
-        },
-      });
+      const task = await Task.findById(id);
       try {
         await task.destroy();
         ctx.flashMessage.notice = `Task #${task.id} has been deleted`;
