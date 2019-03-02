@@ -121,8 +121,7 @@ describe('task', () => {
 
     const res = await request.agent(server)
       .delete(`/tasks/${task.id}`)
-      .set('Cookie', cookie)
-      .send({ form: taskData });
+      .set('Cookie', cookie);
 
     expect(res).toHaveHTTPStatus(302);
 
