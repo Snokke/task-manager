@@ -4,19 +4,23 @@ block title
   - const title = 'Create task';
 
 block content
-  h3.mb-3.text-center.mt-3 Create new task
-  div.row.justify-content-center
-    div.col-7
-      +formFor(f, { url: urlFor('tasks'), method: 'post' })
-        +input(f, 'name', 'Task')
-        +inputArea(f, 'description', 'Description', 12)
-        .row
-          .col-md-6
-            +inputSelect(f, 'taskStatusId', taskStatuses, 'Status')
-          .col-md-6
-            +inputSelect(f, 'assignedToId', users, 'Assigned to')
-        +input(f, 'tags', 'Tags')
-        +button(f, 'Create task')
-          .col.col-auto
-            a(class="btn btn-light" role="button" href=urlFor('tasks') rel='nofollow') Cancel
+  .row.justify-content-center
+    .card.shadow-sm
+      .card-body
+        h3.card-title.text-center Create new task
+        h6.card-subtitle.mb-2.text-muted.text-center You can also select Status, Assigned to and Tags. Add tags separating by spaces or commas
+        +formFor(f, { url: urlFor('tasks'), method: 'post' })
+          +input(f, 'name', 'Task')
+          +inputArea(f, 'description', 'Description', 12)
+          .row
+            .col-md-6
+              +inputSelect(f, 'taskStatusId', taskStatuses, 'Status')
+            .col-md-6
+              +inputSelect(f, 'assignedToId', users, 'Assigned to')
+          +input(f, 'tags', 'Tags')
+          .row
+            .col
+              +button(f, 'Create task')
+            .col.col-auto
+              a(class="btn btn-light" role="button" href=urlFor('tasks') rel='nofollow') Cancel
         

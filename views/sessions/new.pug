@@ -7,8 +7,12 @@ block content
   .row.justify-content-center
     .card
       .card-body
-        h3.text-center Please sign in to Task Manager
+        h3.card-title.text-center Please sign in to Task Manager
         +formFor(f, { url: urlFor('session'), method: 'post' })
           +input(f, 'email', 'Email address')
           +input(f, 'password', 'Password', { as: 'password' })
           +button(f, 'Sign in', 'btn-block')
+        hr
+        .text-muted.text-center You can try Task Manager with
+          .div Email: test@test.com
+          .div Password: test

@@ -7,7 +7,7 @@ block content
   .row.justify-content-center
     .card.shadow-sm
       .card-body
-        h3.text-center Create account for Task Manager
+        h3.card-title.text-center Create account for Task Manager
         +formFor(f, { url: urlFor('users'), method: 'post' })
           +input(f, 'email', 'Email address')
           +input(f, 'firstName', 'First name')

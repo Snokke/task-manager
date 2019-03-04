@@ -17,6 +17,8 @@ import webpackConfig from './webpack.config';
 import addRoutes from './routes';
 import container from './container';
 
+import { User } from './models';
+
 export default () => {
   const app = new Koa();
 
@@ -41,7 +43,11 @@ export default () => {
       flashMessage: ctx.flashMessage,
       isSignedIn: () => ctx.session.userId !== undefined,
       checkAccess: id => ctx.session.userId === id,
+      path: ctx.path,
     };
+    if (ctx.state.isSignedIn) {
+      ctx.state.signedUser = await User.findById(ctx.session.userId);
+    }
     await next();
   });
   app.use(bodyParser());

@@ -12,7 +12,7 @@ block content
       +formFor(f, { url: urlFor('tasks'), method: 'get' })
         .row.justify-content-end
           .col-md-2.align-self-end
-            .row.justify-content-end
+            .row.justify-content-end.mr-1
               if isSignedIn()
                 +inlineInputSelectOnchange(f, 'myTasks', myTasks, 'My tasks', filterQuery.myTasks)
           .col-md-7

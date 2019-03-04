@@ -7,7 +7,7 @@ block content
   .row.justify-content-center
     .card.shadow-sm
       .card-body
-        h3.text-center Edit data of your account 
+        h3.card-title.text-center Edit data of your account 
         +formFor(f, { url: urlFor('editUser', { id: user.id }), method: 'patch' })
           +input(f, 'email', 'Email address')
           +input(f, 'firstName', 'First name')
