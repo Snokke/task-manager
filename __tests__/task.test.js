@@ -74,8 +74,8 @@ describe('task', () => {
 
   it('Get /tasks/:id/edit', async () => {
     const res = await request.agent(server)
-      .set('Cookie', cookie)
-      .get(`/tasks/${fakeTask.id}/edit`);
+      .get(`/tasks/${fakeTask.id}/edit`)
+      .set('Cookie', cookie);
 
     expect(res).toHaveHTTPStatus(200);
   });
@@ -92,7 +92,7 @@ describe('task', () => {
 
     expect(res).toHaveHTTPStatus(200);
 
-    const taskAfterEdit = await Task.findById(taskBeforeEdit.id);
+    const taskAfterEdit = await Task.findByPk(taskBeforeEdit.id);
 
     expect(taskAfterEdit.name).toBe(taskAfterEditData.name);
     expect(taskAfterEdit.description).toBe(taskAfterEditData.description);
@@ -110,7 +110,7 @@ describe('task', () => {
 
     expect(res).toHaveHTTPStatus(200);
 
-    const taskAfterEdit = await Task.findById(taskBeforeEdit.id);
+    const taskAfterEdit = await Task.findByPk(taskBeforeEdit.id);
 
     expect(newTaskStatus.id).toBe(taskAfterEdit.taskStatusId);
   });
@@ -125,7 +125,7 @@ describe('task', () => {
 
     expect(res).toHaveHTTPStatus(302);
 
-    const deletedTask = await Task.findById(task.id);
+    const deletedTask = await Task.findByPk(task.id);
 
     expect(deletedTask).toBeNull();
   });

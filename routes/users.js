@@ -1,4 +1,5 @@
 import buildFormObj from '../lib/formObjectBuilder';
+import requiredAuth from '../lib/middlewares';
 import { encrypt } from '../lib/secure';
 import { User } from '../models';
 
@@ -23,14 +24,19 @@ export default (router) => {
         ctx.render('users/new', { f: buildFormObj(user, e) });
       }
     })
-    .get('editUser', '/users/:id/edit', async (ctx) => {
+    .get('editUser', '/users/:id/edit', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findById(id);
-      ctx.render('users/edit', { user, f: buildFormObj(user) });
+      if (ctx.session.userId === Number(id)) {
+        const user = await User.findByPk(id);
+        ctx.render('users/edit', { user, f: buildFormObj(user) });
+        return;
+      }
+      ctx.flashMessage.warning = 'You can edit only your account';
+      ctx.redirect(router.url('root'));
     })
-    .patch('editUser', '/users/:id/edit', async (ctx) => {
+    .patch('editUser', '/users/:id/edit', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findById(id);
+      const user = await User.findByPk(id);
       const {
         email, firstName, lastName, password,
       } = ctx.request.body.form;
@@ -43,9 +49,9 @@ export default (router) => {
       ctx.flashMessage.warning = 'Wrong password';
       ctx.render('users/edit', { f: buildFormObj(user), user });
     })
-    .delete('deleteUser', '/users/:id', async (ctx) => {
+    .delete('deleteUser', '/users/:id', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findById(id);
+      const user = await User.findByPk(id);
       try {
         await user.destroy();
         ctx.flashMessage.notice = 'User has been deleted';
@@ -58,7 +64,7 @@ export default (router) => {
     })
     .get('showUser', '/user/:id', async (ctx) => {
       const { id } = ctx.params;
-      const user = await User.findById(id);
+      const user = await User.findByPk(id);
       ctx.render('users/show', { user });
     });
 };

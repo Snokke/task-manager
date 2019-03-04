@@ -44,7 +44,8 @@ describe('task', () => {
 
   it('Get /taskstatuses/new', async () => {
     const res = await request.agent(server)
-      .get('/taskstatuses/new');
+      .get('/taskstatuses/new')
+      .set('Cookie', cookie);
 
     expect(res).toHaveHTTPStatus(200);
   });
@@ -77,7 +78,7 @@ describe('task', () => {
 
     expect(res).toHaveHTTPStatus(200);
 
-    const taskStatusAfterEdit = await TaskStatus.findById(taskStatusBeforeEdit.id);
+    const taskStatusAfterEdit = await TaskStatus.findByPk(taskStatusBeforeEdit.id);
 
     expect(taskStatusAfterEdit.name).toBe(taskStatusAfterEditData.name);
   });
@@ -91,7 +92,7 @@ describe('task', () => {
 
     expect(res).toHaveHTTPStatus(200);
 
-    const deletedTaskStatus = await TaskStatus.findById(taskStatus.id);
+    const deletedTaskStatus = await TaskStatus.findByPk(taskStatus.id);
 
     expect(deletedTaskStatus).toBeNull();
   });

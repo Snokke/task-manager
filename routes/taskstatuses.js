@@ -1,4 +1,5 @@
 import buildFormObj from '../lib/formObjectBuilder';
+import requiredAuth from '../lib/middlewares';
 import { TaskStatus } from '../models';
 
 export default (router) => {
@@ -8,11 +9,11 @@ export default (router) => {
       const minTaskStatusId = await TaskStatus.min('id');
       ctx.render('taskstatuses', { f: buildFormObj(taskStatuses), taskStatuses, minTaskStatusId });
     })
-    .get('newTaskStatus', '/taskstatuses/new', async (ctx) => {
+    .get('newTaskStatus', '/taskstatuses/new', requiredAuth, async (ctx) => {
       const taskStatuses = TaskStatus.build();
       ctx.render('taskstatuses/new', { f: buildFormObj(taskStatuses) });
     })
-    .post('taskstatuses', '/taskstatuses', async (ctx) => {
+    .post('taskstatuses', '/taskstatuses', requiredAuth, async (ctx) => {
       const { form } = ctx.request.body;
       const taskStatus = TaskStatus.build(form);
       try {
@@ -24,9 +25,9 @@ export default (router) => {
         ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus, e) });
       }
     })
-    .patch('editTaskStatus', '/taskstatuses/:id', async (ctx) => {
+    .patch('editTaskStatus', '/taskstatuses/:id', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      const taskStatus = await TaskStatus.findById(id);
+      const taskStatus = await TaskStatus.findByPk(id);
       const minTaskStatusId = await TaskStatus.min('id');
       const data = ctx.request.body.form;
       try {
@@ -40,9 +41,9 @@ export default (router) => {
         ctx.render('taskstatuses', { f: buildFormObj(taskStatuses, e), taskStatuses, minTaskStatusId });
       }
     })
-    .delete('deleteTaskStatus', '/taskstatuses/:id', async (ctx) => {
+    .delete('deleteTaskStatus', '/taskstatuses/:id', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      const taskStatus = await TaskStatus.findById(id);
+      const taskStatus = await TaskStatus.findByPk(id);
       const minTaskStatusId = await TaskStatus.min('id');
       try {
         await taskStatus.destroy();

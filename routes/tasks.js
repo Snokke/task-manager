@@ -1,4 +1,5 @@
 import buildFormObj from '../lib/formObjectBuilder';
+import requiredAuth from '../lib/middlewares';
 import {
   getObjectForSelectInput, getTags, parseTags, getScopesForFilter,
 } from '../lib/utils';
@@ -24,13 +25,13 @@ export default (router) => {
         f: buildFormObj(tasks), filterQuery, tasks, users, taskStatuses, tags, countTasks, myTasks,
       });
     })
-    .get('newTask', '/tasks/new', async (ctx) => {
+    .get('newTask', '/tasks/new', requiredAuth, async (ctx) => {
       const task = Task.build();
       const users = await getObjectForSelectInput(User, 'fullName', 1);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/new', { f: buildFormObj(task), users, taskStatuses });
     })
-    .post('tasks', '/tasks', async (ctx) => {
+    .post('tasks', '/tasks', requiredAuth, async (ctx) => {
       const { userId } = ctx.session;
       const { form } = ctx.request.body;
       const tagString = form.tags;
@@ -53,23 +54,23 @@ export default (router) => {
     })
     .get('showTask', '/tasks/:id', async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.scope('allAssociations').findById(id);
+      const task = await Task.scope('allAssociations').findByPk(id);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
     })
-    .get('editTask', '/tasks/:id/edit', async (ctx) => {
+    .get('editTask', '/tasks/:id/edit', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.scope('allAssociations').findById(id);
+      const task = await Task.scope('allAssociations').findByPk(id);
       const users = await getObjectForSelectInput(User, 'fullName', 1);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       ctx.render('tasks/edit', {
         f: buildFormObj(task), task, users, taskStatuses,
       });
     })
-    .patch('editTask', '/tasks/:id/edit', async (ctx) => {
+    .patch('editTask', '/tasks/:id/edit', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
       const tagString = ctx.request.body.form.tags;
-      let task = await Task.scope('allAssociations').findById(id);
+      let task = await Task.scope('allAssociations').findByPk(id);
       const tagsNames = parseTags(tagString);
       const users = await getObjectForSelectInput(User, 'fullName', 1);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
@@ -81,7 +82,7 @@ export default (router) => {
         await task.update(data);
         const tags = await getTags(Tag, tagsNames);
         await task.setTags(tags);
-        task = await Task.scope('allAssociations').findById(id);
+        task = await Task.scope('allAssociations').findByPk(id);
         ctx.flashMessage.notice = `Task #${task.id} has been updated`;
         ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
       } catch (e) {
@@ -91,14 +92,14 @@ export default (router) => {
         });
       }
     })
-    .patch('updateTaskStatus', '/tasks/:id/editstatus', async (ctx) => {
+    .patch('updateTaskStatus', '/tasks/:id/editstatus', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      let task = await Task.scope('allAssociations').findById(id);
+      let task = await Task.scope('allAssociations').findByPk(id);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
       const newStatus = ctx.request.body.form;
       try {
         await task.update(newStatus);
-        task = await Task.scope('allAssociations').findById(id);
+        task = await Task.scope('allAssociations').findByPk(id);
         ctx.flashMessage.notice = `Status has been updated to "${task.taskStatus.name}"`;
         ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
       } catch (e) {
@@ -106,9 +107,9 @@ export default (router) => {
         ctx.render('tasks/show', { f: buildFormObj(task, e), task, taskStatuses });
       }
     })
-    .delete('deleteTask', '/tasks/:id', async (ctx) => {
+    .delete('deleteTask', '/tasks/:id', requiredAuth, async (ctx) => {
       const { id } = ctx.params;
-      const task = await Task.findById(id);
+      const task = await Task.findByPk(id);
       try {
         await task.destroy();
         ctx.flashMessage.notice = `Task #${task.id} has been deleted`;
