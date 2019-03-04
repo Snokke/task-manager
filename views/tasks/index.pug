@@ -47,7 +47,7 @@ block content
               a(href=urlFor('showUser', { id: task.assignedTo.id }))= task.assignedTo.fullName
           td.align-middle
             each tag in task.tags
-              span.badge.badge-pill.badge-success= tag.name
+              a.badge.badge-success.badge-pill(href=`?tags=${tag.id}`)= tag.name
               span  
           td.align-middle= formatDate(new Date(task.createdAt), 'HH:mm DD.MM.YYYY')
   if (countTasks === 0)
