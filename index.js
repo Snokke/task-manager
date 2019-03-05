@@ -46,7 +46,7 @@ export default () => {
       path: ctx.path,
     };
     if (ctx.state.isSignedIn) {
-      ctx.state.signedUser = await User.findById(ctx.session.userId);
+      ctx.state.currentUser = await User.findByPk(ctx.session.userId);
     }
     await next();
   });
