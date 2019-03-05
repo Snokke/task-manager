@@ -7,14 +7,12 @@ block content
   table.table.table-hover.shadow-sm
     thead.thead-light
       tr
-        th ID
         th Full Name
         th Email
         th Created
     tbody
       each user in users
         tr
-          td.align-middle= user.id
           td.align-middle
             a(href=urlFor('showUser', { id: user.id }))= user.fullName
           td.align-middle= user.email

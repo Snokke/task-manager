@@ -7,18 +7,30 @@ block content
   .row.justify-content-center
     .card.shadow-sm
       .card-body
-        h3.text-center.mb-2 Task statuses
+        h3.text-center.mb-2(id="testtest" ) Task statuses
         if isSignedIn()
-          each taskStatus in taskStatuses
+          each taskStatus in taskStatuses 
             +inlineFormFor(f, { url: urlFor('editTaskStatus', { id: taskStatus.id }), method: 'patch' })
               .form-group.mx-sm-2.mb-2
                 +inlineInput(f, taskStatus, 'name')
               button.btn.btn-primary.mb-2.mr-2(type="submit") Update
               if (taskStatus.id !== minTaskStatusId)
-                a.btn.btn-danger.mb-2.mr-2(role="button" href=urlFor('deleteTaskStatus', { id: taskStatus.id }) data-method='delete' rel='nofollow') Delete
+                button.btn.btn-danger.mb-2.mr-2(type="button" data-toggle="modal" data-target=`#deleteTaskStatus${taskStatus.id}`) Delete
+                div(class="modal fade" id=`deleteTaskStatus${taskStatus.id}` tabindex="-1" role="dialog" aria-hidden="true")
+                  div(class="modal-dialog" role="document")
+                    div.modal-content
+                      div.modal-header
+                        h5.modal-title Delete confirmation
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                          span(aria-hidden="true") &times;
+                      div.modal-body Are you sure you want do delete this status? This action cannot be undone.
+                      div.modal-footer
+                        button(type="button" class="btn btn-secondary" data-dismiss="modal") Close
+                        a(class="btn btn-danger" role="button" href=urlFor('deleteTaskStatus', { id: taskStatus.id }) data-method='delete' rel='nofollow') Delete status
           .row.justify-content-center.mt-4
-              a(class="btn btn-primary" role="button" href=urlFor('newTaskStatus') rel='nofollow') Add new status
+              a(class="btn btn-primary" role="button" href=urlFor('newTaskStatus') rel='nofollow') Add new status   
         else
           each taskStatus in taskStatuses
             .row.mx-sm-2.mb-2
               input(type="text" class="form-control" value=taskStatus.name disabled)
+  

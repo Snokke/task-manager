@@ -18,6 +18,12 @@ block content
             .col-md-6
               +inputSelect(f, 'assignedToId', users, 'Assigned to')
           +input(f, 'tags', 'Tags')
+          if (allTags.length > 0)
+            .mb-3
+              span Existing tags: 
+              each tag in allTags
+                span.badge.badge-success.badge-pill= tag.name
+                span  
           .row
             .col
               +button(f, 'Create task')

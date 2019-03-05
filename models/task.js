@@ -3,7 +3,7 @@ export default (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true,
+        notEmpty: { args: true, msg: "Task name cannot be empty"},
       },
     },
     description: DataTypes.TEXT,

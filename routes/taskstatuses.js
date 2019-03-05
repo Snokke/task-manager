@@ -21,7 +21,7 @@ export default (router) => {
         ctx.flashMessage.notice = `Status "${taskStatus.name}" has been created`;
         ctx.redirect(router.url('taskstatuses'));
       } catch (e) {
-        ctx.flashMessage.notice = `Status "${taskStatus.name}" cannot be created`;
+        ctx.flashMessage.warning = 'Cannot create status';
         ctx.render('taskstatuses/new', { f: buildFormObj(taskStatus, e) });
       }
     })
@@ -37,7 +37,7 @@ export default (router) => {
         ctx.render('taskstatuses', { f: buildFormObj(taskStatuses), taskStatuses, minTaskStatusId });
       } catch (e) {
         const taskStatuses = await TaskStatus.findAll();
-        ctx.flashMessage.warning = `Unable to update status "${taskStatus.id}"`;
+        ctx.flashMessage.warning = `Unable to update status #${taskStatus.id}`;
         ctx.render('taskstatuses', { f: buildFormObj(taskStatuses, e), taskStatuses, minTaskStatusId });
       }
     })

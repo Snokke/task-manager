@@ -12,9 +12,6 @@ module.exports = {
     description: {
       type: Sequelize.TEXT,
     },
-    status: {
-      type: Sequelize.STRING,
-    },
     creatorId: {
       type: Sequelize.INTEGER,
     },
@@ -23,6 +20,10 @@ module.exports = {
     },
     taskStatusId: {
       type: Sequelize.INTEGER,
+      references: {
+        model: 'TaskStatuses',
+        key: 'id',
+      },
     },
     createdAt: {
       allowNull: false,

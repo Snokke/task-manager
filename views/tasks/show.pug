@@ -46,7 +46,7 @@ block content
                 td Tags
                 td
                   each tag in task.tags
-                    span.badge.badge-pill.badge-success= tag.name
+                    a.badge.badge-success.badge-pill(href=`/tasks/?tags=${tag.id}`)= tag.name
                     span  
           if isSignedIn() 
             a(href=urlFor('editTask', { id: task.id }) class="btn btn-primary") Edit task

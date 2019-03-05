@@ -27,9 +27,12 @@ export default (router) => {
     })
     .get('newTask', '/tasks/new', requiredAuth, async (ctx) => {
       const task = Task.build();
+      const allTags = await Tag.findAll();
       const users = await getObjectForSelectInput(User, 'fullName', 1);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
-      ctx.render('tasks/new', { f: buildFormObj(task), users, taskStatuses });
+      ctx.render('tasks/new', {
+        f: buildFormObj(task), allTags, users, taskStatuses,
+      });
     })
     .post('tasks', '/tasks', requiredAuth, async (ctx) => {
       const { userId } = ctx.session;
@@ -49,7 +52,9 @@ export default (router) => {
         ctx.redirect(router.url('tasks'));
       } catch (e) {
         ctx.flashMessage.warning = 'Cannot create task';
-        ctx.render('tasks/new', { f: buildFormObj(task, e) });
+        const users = await getObjectForSelectInput(User, 'fullName', 1);
+        const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
+        ctx.render('tasks/new', { f: buildFormObj(task, e), users, taskStatuses });
       }
     })
     .get('showTask', '/tasks/:id', async (ctx) => {
@@ -63,8 +68,9 @@ export default (router) => {
       const task = await Task.scope('allAssociations').findByPk(id);
       const users = await getObjectForSelectInput(User, 'fullName', 1);
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
+      const allTags = await Tag.findAll();
       ctx.render('tasks/edit', {
-        f: buildFormObj(task), task, users, taskStatuses,
+        f: buildFormObj(task), task, allTags, users, taskStatuses,
       });
     })
     .patch('editTask', '/tasks/:id/edit', requiredAuth, async (ctx) => {
