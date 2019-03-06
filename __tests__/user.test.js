@@ -5,24 +5,29 @@ import { User, sequelize } from '../models';
 import { getCookie, getFakeUser } from './lib/utils';
 import app from '..';
 
-const user = getFakeUser();
+const fakeUser = getFakeUser();
 
 describe('user', () => {
   let server;
+  let cookie;
+  let user;
 
   beforeAll(async () => {
     expect.extend(matchers);
     await sequelize.sync({ force: true });
+    user = await User.create(fakeUser);
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     server = app().listen();
+    cookie = await getCookie(server, user);
   });
 
   it('Create user', async () => {
+    const newUser = getFakeUser();
     const res = await request.agent(server)
       .post('/users')
-      .send({ form: user });
+      .send({ form: newUser });
 
     expect(res).toHaveHTTPStatus(302);
   });
@@ -43,10 +48,8 @@ describe('user', () => {
       password: user.password,
     };
 
-    const cookie = getCookie(server, user);
-    const { id } = await User.findOne({ where: { email: user.email } });
     const res = await request.agent(server)
-      .patch(`/users/${id}/edit`)
+      .patch(`/users/${user.id}/edit`)
       .set('Cookie', cookie)
       .send({ form: changedUser });
 
@@ -54,13 +57,40 @@ describe('user', () => {
   });
 
   it('Delete account', async () => {
-    const cookie = getCookie(server, user);
-    const { id } = await User.findOne({ where: { email: user.email } });
     const res = await request.agent(server)
-      .delete(`/users/${id}`)
+      .delete(`/users/${user.id}`)
       .set('Cookie', cookie);
 
     expect(res).toHaveHTTPStatus(302);
+  });
+
+  it('Get /session/new', async () => {
+    const res = await request.agent(server)
+      .get('/session/new');
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('Get /users/new', async () => {
+    const res = await request.agent(server)
+      .get('/users/new');
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('Get /users', async () => {
+    const res = await request.agent(server)
+      .get('/users');
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('Get /user/:id', async () => {
+    const newUser = await User.create(getFakeUser());
+    const res = await request.agent(server)
+      .get(`/user/${newUser.id}`);
+
+    expect(res).toHaveHTTPStatus(200);
   });
 
   afterEach((done) => {
