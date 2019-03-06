@@ -10,7 +10,9 @@ import {
 export default (router) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
-      const filterQuery = ctx.request.query;
+      const { tags: rawTags, ...filter } = ctx.request.query;
+      const tagsArray = !rawTags || Array.isArray(rawTags) ? rawTags : [rawTags];
+      const filterQuery = { tags: tagsArray, ...filter };
       const creatorId = ctx.session.userId;
       const scopes = getScopesForFilter(filterQuery, creatorId);
       const { rows: tasks, count: countTasks } = await Task.scope(scopes).findAndCountAll();
