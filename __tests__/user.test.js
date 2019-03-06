@@ -85,6 +85,14 @@ describe('user', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
+  it('Get wrong /users/:id/edit', async () => {
+    const res = await request.agent(server)
+      .get(`/users/${user.id}/edit`)
+      .set('Cookie', cookie);
+
+    expect(res).toHaveHTTPStatus(302);
+  });
+
   it('Get /user/:id', async () => {
     const newUser = await User.create(getFakeUser());
     const res = await request.agent(server)

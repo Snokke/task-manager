@@ -73,6 +73,14 @@ describe('task', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
+  it('Get /tasks/new', async () => {
+    const res = await request.agent(server)
+      .get('/tasks/new')
+      .set('Cookie', cookie);
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
   it('Patch /tasks/:id/edit', async () => {
     const taskData = await getFakeTask(user, fakeTaskStatus);
     const taskBeforeEdit = await Task.create(taskData);
