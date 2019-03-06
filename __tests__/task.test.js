@@ -1,23 +1,16 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
-import faker from 'faker';
 
 import {
   User, TaskStatus, Task, sequelize,
 } from '../models';
-import { getCookie, getFakeTask } from './lib/utils';
+import {
+  getCookie, getFakeTask, getFakeUser, getFakeTaskStatus,
+} from './lib/utils';
 import app from '..';
 
-const fakeTaskStatus = {
-  name: faker.lorem.word(),
-};
-
-const fakeUser = {
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-};
+const fakeTaskStatus = getFakeTaskStatus();
+const fakeUser = getFakeUser();
 
 describe('task', () => {
   let server;

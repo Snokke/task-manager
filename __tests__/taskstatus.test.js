@@ -1,23 +1,14 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
-import faker from 'faker';
 
 import {
   User, TaskStatus, sequelize,
 } from '../models';
-import { getCookie } from './lib/utils';
+import { getCookie, getFakeUser, getFakeTaskStatus } from './lib/utils';
 import app from '..';
 
-const fakeTaskStatus = {
-  name: faker.lorem.word(),
-};
-
-const fakeUser = {
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-};
+const fakeTaskStatus = getFakeTaskStatus();
+const fakeUser = getFakeUser();
 
 describe('task', () => {
   let server;
@@ -69,7 +60,7 @@ describe('task', () => {
 
   it('Patch /taskstatuses/:id', async () => {
     const taskStatusBeforeEdit = await TaskStatus.create(fakeTaskStatus);
-    const taskStatusAfterEditData = { name: faker.lorem.word() };
+    const taskStatusAfterEditData = getFakeTaskStatus();
 
     const res = await request.agent(server)
       .patch(`/taskstatuses/${taskStatusBeforeEdit.id}`)

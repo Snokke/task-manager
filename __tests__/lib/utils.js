@@ -21,4 +21,17 @@ const getFakeTask = async (user, taskStatusData) => {
   return fakeTask;
 };
 
-export { getCookie, getFakeTask };
+const getFakeUser = () => ({
+  firstName: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+});
+
+const getFakeTaskStatus = () => ({
+  name: faker.lorem.word(),
+});
+
+export {
+  getCookie, getFakeTask, getFakeUser, getFakeTaskStatus,
+};

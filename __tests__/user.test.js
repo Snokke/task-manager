@@ -1,17 +1,11 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
-import faker from 'faker';
 
 import { User, sequelize } from '../models';
-import { getCookie } from './lib/utils';
+import { getCookie, getFakeUser } from './lib/utils';
 import app from '..';
 
-const user = {
-  firstName: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-};
+const user = getFakeUser();
 
 describe('user', () => {
   let server;
