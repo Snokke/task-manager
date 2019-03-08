@@ -1,7 +1,7 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import requiredAuth from '../lib/middlewares';
 import {
-  getObjectForSelectInput, getTags, parseTags, getScopesForFilter,
+  getObjectForSelectInput, getTags, parseTags, getScopesForFilter, deleteUnnecessaryTags,
 } from '../lib/utils';
 import {
   User, Task, TaskStatus, Tag,
@@ -90,6 +90,7 @@ export default (router) => {
         await task.update(data);
         const tags = await getTags(Tag, tagsNames);
         await task.setTags(tags);
+        await deleteUnnecessaryTags(Tag, Task);
         task = await Task.scope('allAssociations').findByPk(id);
         ctx.flashMessage.notice = `Task #${task.id} has been updated`;
         ctx.render('tasks/show', { f: buildFormObj(task), task, taskStatuses });
@@ -120,6 +121,7 @@ export default (router) => {
       const task = await Task.findByPk(id);
       try {
         await task.destroy();
+        await deleteUnnecessaryTags(Tag, Task);
         ctx.flashMessage.notice = `Task #${task.id} has been deleted`;
         ctx.redirect(router.url('tasks'));
       } catch (e) {
