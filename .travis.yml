@@ -14,7 +14,7 @@ before_script:
   - ./cc-test-reporter before-build  
 
 script:
-  - make lint test
+  - make test
 
 after_script:
   - ./cc-test-reporter after-build --debug --exit-code $TRAVIS_TEST_RESULT
