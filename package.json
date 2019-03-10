@@ -28,14 +28,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Snokke/project-lvl4-s383.git"
+    "url": "git+https://github.com/Snokke/task-manager-hexlet-project4.git"
   },
   "author": "Andrei Babintsev",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Snokke/project-lvl4-s383/issues"
+    "url": "https://github.com/Snokke/task-manager-hexlet-project4/issues"
   },
-  "homepage": "https://github.com/Snokke/project-lvl4-s383#readme",
+  "homepage": "https://github.com/Snokke/task-manager-hexlet-project4#readme",
   "dependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
