@@ -13,7 +13,7 @@ Live demo (Heroku): https://task-manager-snokke.herokuapp.com/
 
 **Task Manager** was created as a graduation project at [Hexlet](https://ru.hexlet.io/) (4th project), profession: **"Backend JavaScript Developer (Node.js)"**.
 
-Tools used in the development: [Node.js](https://nodejs.org/en/), [Koa](https://koajs.com/), [Bootstrap 4](https://getbootstrap.com/), [Sequelize](http://docs.sequelizejs.com/), [Rollbar](https://rollbar.com/), [Webpack](https://webpack.js.org/), [Pug](https://pugjs.org/api/getting-started.html). Project deployed at [Heroku](https://www.heroku.com/).
+Tools used in the development: [Node.js](https://nodejs.org/en/), [Koa](https://koajs.com/), [Bootstrap 4](https://getbootstrap.com/), [Sequelize](http://docs.sequelizejs.com/), [Rollbar](https://rollbar.com/), [Webpack](https://webpack.js.org/), [Pug](https://pugjs.org/api/getting-started.html). Project deployed at [Heroku](https://www.heroku.com/). For testing was used [Jest](https://jestjs.io/en/).
 
 Implemented functionality:
 
