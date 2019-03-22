@@ -56,7 +56,10 @@ export default (router) => {
         ctx.flashMessage.warning = 'Cannot create task';
         const users = await getObjectForSelectInput(User, 'fullName', 1);
         const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name');
-        ctx.render('tasks/new', { f: buildFormObj(task, e), users, taskStatuses });
+        const allTags = await Tag.findAll();
+        ctx.render('tasks/new', {
+          f: buildFormObj(task, e), allTags, users, taskStatuses,
+        });
       }
     })
     .get('showTask', '/tasks/:id', async (ctx) => {
