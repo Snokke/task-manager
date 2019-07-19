@@ -53,3 +53,13 @@ block content
   if (countTasks === 0)
     .row.justify-content-center
       p No tasks found
+  if (pages.numOfPages !== 1)
+    nav(aria-label='Page navigation')
+      ul.pagination
+        - var page = 1;
+        while page <= pages.numOfPages
+          - const isActive = (page == pages.currentPage ? 'active' : '');
+          li.page-item(class= isActive)
+            - const getQuery = (queryName) => queryName in filterQuery ? `&${queryName}=${filterQuery[queryName]}` : '';
+            - const getTagQuery = (queryName) => queryName in filterQuery ? `&${queryName}=${filterQuery[queryName].reduce((acc, tagId) => `${acc}&${queryName}=${tagId}`)}` : '';
+            a.page-link(href=`?page=${page}${getQuery('myTasks')}${getQuery('taskStatusId')}${getQuery('assignedToId')}${getTagQuery('tags')}`)= page++

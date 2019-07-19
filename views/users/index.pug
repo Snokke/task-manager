@@ -17,3 +17,11 @@ block content
             a(href=urlFor('showUser', { id: user.id }))= user.fullName
           td.align-middle= user.email
           td.align-middle= formatDate(new Date(user.createdAt), 'HH:mm DD.MM.YYYY')
+  if (pages.numOfPages !== 1)
+    nav(aria-label='Page navigation')
+      ul.pagination
+        - var page = 1;
+        while page <= pages.numOfPages
+          - const isActive = (page == pages.currentPage ? 'active' : '');
+          li.page-item(class= isActive)
+            a.page-link(href=`?page=${page}`)= page++

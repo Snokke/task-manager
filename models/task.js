@@ -48,7 +48,8 @@ export default (sequelize, DataTypes) => {
     Task.belongsToMany(models.Tag, { as: 'tags', through: 'TaskTags', foreignKey: 'taskId' });
     Task.addScope('allAssociations', {
       include: ['creator', 'assignedTo', 'taskStatus', 'tags'],
-    }),
+    });
+
     Task.addScope('filterByTags', ids => ({
       include: [{
         model: models.Tag,

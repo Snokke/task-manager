@@ -1,7 +1,7 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import requiredAuth from '../lib/middlewares';
 import {
-  getObjectForSelectInput, getTags, parseTags, getScopesForFilter, deleteUnnecessaryTags,
+  getObjectForSelectInput, getTags, parseTags, getScopesForFilter, deleteUnnecessaryTags, paginate,
 } from '../lib/utils';
 import {
   User, Task, TaskStatus, Tag,
@@ -10,12 +10,16 @@ import {
 export default (router) => {
   router
     .get('tasks', '/tasks', async (ctx) => {
-      const { tags: rawTags, ...filter } = ctx.request.query;
+      const { query } = ctx.request;
+      const { tags: rawTags, page, ...filter } = query;
+      const tasksPageSize = 3;
+      const currentPage = page || 1;
       const tagsArray = !rawTags || Array.isArray(rawTags) ? rawTags : [rawTags];
-      const filterQuery = { tags: tagsArray, ...filter };
+      const filterQuery = { page: currentPage, tags: tagsArray, ...filter };
       const creatorId = ctx.session.userId;
       const scopes = getScopesForFilter(filterQuery, creatorId);
-      const { rows: tasks, count: countTasks } = await Task.scope(scopes).findAndCountAll();
+      const { rows: tasks, count: countTasks } = await Task.scope(scopes)
+        .findAndCountAll(paginate(currentPage, tasksPageSize));
       const users = await getObjectForSelectInput(User, 'fullName', 1, 'All');
       const tags = await getObjectForSelectInput(Tag, 'name');
       const taskStatuses = await getObjectForSelectInput(TaskStatus, 'name', 1, 'All');
@@ -23,8 +27,20 @@ export default (router) => {
         { value: 'All', name: 'All' },
         { value: 1, name: 'My tasks' },
       ];
+
+      const numOfPages = Math.ceil(countTasks / tasksPageSize);
+      const pages = { currentPage, numOfPages };
+
       ctx.render('tasks', {
-        f: buildFormObj(tasks), filterQuery, tasks, users, taskStatuses, tags, countTasks, myTasks,
+        f: buildFormObj(tasks),
+        filterQuery,
+        tasks,
+        users,
+        taskStatuses,
+        tags,
+        countTasks,
+        myTasks,
+        pages,
       });
     })
     .get('newTask', '/tasks/new', requiredAuth, async (ctx) => {

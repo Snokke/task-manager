@@ -1,13 +1,20 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import requiredAuth from '../lib/middlewares';
 import { encrypt } from '../lib/secure';
+import { paginate } from '../lib/utils';
 import { User } from '../models';
 
 export default (router) => {
   router
     .get('users', '/users', async (ctx) => {
-      const users = await User.findAll();
-      ctx.render('users', { users });
+      const usersPageSize = 10;
+      const { query } = ctx.request;
+      const currentPage = query.page || 1;
+      const { count: numOfAllUsers } = await User.findAndCountAll();
+      const numOfPages = Math.ceil(numOfAllUsers / usersPageSize);
+      const pages = { currentPage, numOfPages };
+      const users = await User.findAll(paginate(currentPage, usersPageSize));
+      ctx.render('users', { users, pages });
     })
     .get('newUser', '/users/new', (ctx) => {
       const user = User.build();
