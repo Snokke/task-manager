@@ -27,7 +27,6 @@ export default (router) => {
         { value: 'All', name: 'All' },
         { value: 1, name: 'My tasks' },
       ];
-
       const numOfPages = Math.ceil(countTasks / tasksPageSize);
       const pages = { currentPage, numOfPages };
 

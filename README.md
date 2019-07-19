@@ -22,6 +22,7 @@ Implemented functionality:
 - Create new tasks, update and delete
 - Authentication
 - Update task status
+- Pagination on pages: Users and Tasks
 - Filter tasks by:
   - My tasks
   - Tags
