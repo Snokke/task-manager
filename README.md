@@ -28,5 +28,4 @@ Implemented functionality:
   - Tags
   - Statuses
   - Assigned to
-
-My account at **Hexlet**: [Andrei Babintsev](https://ru.hexlet.io/u/snokke)
+  
